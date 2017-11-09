@@ -31,7 +31,6 @@ def mode(X):
     for key in d.keys():
         if d[key] > max_num:
             max_num = d[key]
-    print max_num
 
     for key in d.keys():
         if d[key] == max_num:
