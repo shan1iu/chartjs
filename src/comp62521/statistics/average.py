@@ -1,4 +1,3 @@
-
 def mean(X):
     n = len(X)
     if n > 0:
@@ -27,9 +26,15 @@ def mode(X):
         else:
             d[item] = 1
 
-    m = (0, 0)
+    m = list()
+    max_num = 0
     for key in d.keys():
-        if d[key] > m[1]:
-            m = (key, d[key])
+        if d[key] > max_num:
+            max_num = d[key]
+    print max_num
 
-    return [m[0]]
+    for key in d.keys():
+        if d[key] == max_num:
+            m.append(key)
+
+    return m
