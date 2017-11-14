@@ -94,6 +94,22 @@ def showStatisticsMenu():
     args = {"dataset":dataset}
     return render_template('statistics.html', args=args)
 
+
+
+@app.route("/author_first")
+def showauthor_first():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "id":"author_first"}
+    args['title'] = "First_Last_Position"
+    name=""
+    if "name" in request.args:
+        name = request.args.get("name")
+    args["name"] = db.first_last_author(name)
+    return render_template('author_first.html', args=args)
+
+
+
 @app.route("/statisticsdetails/<status>")
 def showPublicationSummary(status):
     dataset = app.config['DATASET']
