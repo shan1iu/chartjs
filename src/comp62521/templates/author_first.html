@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block content %}
+<h1>{{ args.title }}</h1>
+<form name="input" action="/author_first" method="get" data-ajax="false" onSubmit="return validateForm(this)">
+Name of author: <input type="text" name="name">
+<input type="submit" value="Submit">
+</form>
+
+<table >
+    {% for data in args.name %}
+    <tr>
+      
+      <td>{{ data }}</td>
+     
+    </tr>
+    {% endfor %}
+</table>
+<script>
+function validateForm(form){
+  var letters = /^[a-zA-Z\s]*$/;
+  nombre = form["name"].value;
+
+  if (nombre.match(letters))
+  {
+    if (nombre==""){alert("Please write a name");return false;}
+    else {return true;}
+  }else
+  {
+    
+    alert("Invalid input just letters");
+    return false;
+  }
+
+  return false;
+}
+
+</script>
+{% endblock %}
