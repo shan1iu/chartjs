@@ -361,7 +361,27 @@ class Database:
                 if a < a2:
                     links.add((a, a2))
         return (nodes, links)
-
+    def first_last_author(self,name):
+        first=0
+        last=0  
+        error=1
+        for a in self.authors:
+              if a.name==name:
+                 error=0
+                 break
+        for p in self.publications:
+              if self.authors[p.authors[0]].name==name:
+                    first=first+1
+              if self.authors[p.authors[len(p.authors)-1]].name==name:
+                    last=last+1
+        if error==1:
+          if name=="":
+             return ({""})
+          else:
+             return ({"Please write an existed author"})
+        else:
+           m="Stats for %s\nNumber of times first author = %d\nNumber of times last author = %d"%(name,first,last)
+        return ("Stats for "+str(name),"Number of times first author = "+str(first),"Number of times last author = "+str(last))
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = [ "sub", "sup", "i", "tt", "ref" ]
     PUB_TYPE = {
