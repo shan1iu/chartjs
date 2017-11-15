@@ -101,7 +101,7 @@ def showauthor_first():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     args = {"dataset":dataset, "id":"author_first"}
-    args['title'] = "First_Last_Position"
+    args['title'] = "Number of times author appears first and last"
     name=""
     if "name" in request.args:
         name = request.args.get("name")

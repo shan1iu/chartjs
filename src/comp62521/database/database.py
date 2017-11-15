@@ -193,7 +193,7 @@ class Database:
     def get_average_authors_per_publication_by_author(self, av):
         header = ("Author", "Number of conference papers",
             "Number of journals", "Number of books",
-            "Number of book chapers", "All publications")
+            "Number of book chapters", "All publications")
 
         astats = [ [[], [], [], []] for _ in range(len(self.authors)) ]
         for p in self.publications:
@@ -212,7 +212,7 @@ class Database:
     def get_publications_by_author(self):
         header = ("Author", "Number of conference papers",
             "Number of journals", "Number of books",
-            "Number of book chapers", "Total")
+            "Number of book chapters", "Total")
 
         astats = [ [0, 0, 0, 0] for _ in range(len(self.authors)) ]
         for p in self.publications:
@@ -247,7 +247,7 @@ class Database:
     def get_publications_by_year(self):
         header = ("Year", "Number of conference papers",
             "Number of journals", "Number of books",
-            "Number of book chapers", "Total")
+            "Number of book chapters", "Total")
 
         ystats = {}
         for p in self.publications:
@@ -286,7 +286,7 @@ class Database:
     def get_author_totals_by_year(self):
         header = ("Year", "Number of conference papers",
             "Number of journals", "Number of books",
-            "Number of book chapers", "Total")
+            "Number of book chapters", "Total")
 
         ystats = {}
         for p in self.publications:
@@ -361,6 +361,7 @@ class Database:
                 if a < a2:
                     links.add((a, a2))
         return (nodes, links)
+
     def first_last_author(self,name):
         first=0
         last=0  
@@ -378,10 +379,11 @@ class Database:
           if name=="":
              return ({""})
           else:
-             return ({"Please write an existed author"})
-        else:
-           m="Stats for %s\nNumber of times first author = %d\nNumber of times last author = %d"%(name,first,last)
-        return ("Stats for "+str(name),"Number of times first author = "+str(first),"Number of times last author = "+str(last))
+             return ({"That author does not exist"})
+        return "Stats for " + str(name), "Number of times first author = " + str(first), \
+               "Number of times last author = " + str(last)
+
+
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = [ "sub", "sup", "i", "tt", "ref" ]
     PUB_TYPE = {

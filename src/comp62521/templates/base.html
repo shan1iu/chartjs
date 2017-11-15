@@ -1,23 +1,24 @@
 <!doctype html>
 <html>
 
-  <head>
+<head>
     <title>{% block title %}{% endblock %}</title>
-  </head>
+    <script src="{{ url_for('static', filename='sort.js') }}"></script>
+</head>
 
-  <body>
-    <div id="page">
-      <div id="header">
+<body>
+<div id="page">
+
+    <div id="header">
         <h1>COMP62521: {{ args.dataset }}</h1>
-
         <div id="navigation">
-          <a href="/">Home</a>
+            <input type="button" onclick="location.href='/';" value="Home" />
         </div>
-      </div>
-
-      <div id="content">
-        {% block content %}{% endblock %}
-      </div>
     </div>
-  </body>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+</body>
 </html>
