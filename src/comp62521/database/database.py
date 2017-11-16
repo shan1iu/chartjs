@@ -376,8 +376,7 @@ class Database:
                 return "Stats for " + str(name), "Number of times first author = " + str(first), \
                        "Number of times last author = " + str(last)
             else:
-                return {""} if name == "" else {"That author does not exist"}
-
+                return {""} if name == "" else {name + ": does not exist in any publication"}
 
 
 class DocumentHandler(handler.ContentHandler):
