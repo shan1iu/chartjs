@@ -3,7 +3,8 @@
 
 <head>
     <title>{% block title %}{% endblock %}</title>
-    <script src="{{ url_for('static', filename='sort.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sort.js') }}"></script>
+    <link type="text/css" href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -12,7 +13,7 @@
     <div id="header">
         <h1>COMP62521: {{ args.dataset }}</h1>
         <div id="navigation">
-            <a href="/">Home</a>
+            <a href="/"><button type="button" id="homebutton"><span>Home</span></button></a>
         </div>
     </div>
 

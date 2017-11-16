@@ -363,25 +363,21 @@ class Database:
         return (nodes, links)
 
     def first_last_author(self,name):
-        first=0
-        last=0  
-        error=1
-        for a in self.authors:
-              if a.name==name:
-                 error=0
-                 break
-        for p in self.publications:
-              if self.authors[p.authors[0]].name==name:
-                    first=first+1
-              if self.authors[p.authors[len(p.authors)-1]].name==name:
-                    last=last+1
-        if error==1:
-          if name=="":
-             return ({""})
-          else:
-             return ({"That author does not exist"})
-        return "Stats for " + str(name), "Number of times first author = " + str(first), \
-               "Number of times last author = " + str(last)
+            name = ' '.join(name.strip().split())
+            first = 0
+            last = 0
+            names = {author.name for author in self.authors}
+            if name.lower() in (name.lower() for name in names):
+                for pub in self.publications:
+                    if self.authors[pub.authors[0]].name.lower() == name.lower():
+                        first += 1
+                    if self.authors[pub.authors[len(pub.authors) - 1]].name.lower() == name.lower():
+                        last += 1
+                return "Stats for " + str(name), "Number of times first author = " + str(first), \
+                       "Number of times last author = " + str(last)
+            else:
+                return {""} if name == "" else {"That author does not exist"}
+
 
 
 class DocumentHandler(handler.ContentHandler):
