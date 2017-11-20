@@ -377,10 +377,11 @@ class Database:
         header, data = self.get_publications_by_author()
         header = ("Author", "Number of conference papers",
                   "Number of journals", "Number of books",
-                  "Number of book chapters", "Total publications", "First")
+                  "Number of book chapters", "Total publications", "First", "Last")
         for i in range(len(data)):
             first, last = self.first_last_author(data[i][0])
             data[i].append(first)
+            data[i].append(last)
         return header, data
 
 
