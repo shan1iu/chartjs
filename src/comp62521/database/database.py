@@ -366,12 +366,16 @@ class Database:
         name = ' '.join(name.strip().split())
         first = 0
         last = 0
+        sole = 0
         for pub in self.publications:
             if self.authors[pub.authors[0]].name.lower() == name.lower():
                 first += 1
+                if len(pub.authors) == 1:
+                    sole += 1
             if self.authors[pub.authors[len(pub.authors) - 1]].name.lower() == name.lower():
                 last += 1
-        return first, last
+        return first, last, sole
+
 
     def get_author_stats(self):
         header, data = self.get_publications_by_author()
@@ -379,7 +383,7 @@ class Database:
                   "Number of journals", "Number of books",
                   "Number of book chapters", "Total publications", "Coauthors", "First", "Last")
         for i in range(len(data)):
-            first, last = self.first_last_author(data[i][0])
+            first, last, _ = self.first_last_author(data[i][0])
             coauthors = self.get_coauthor_details(data[i][0])
             data[i].append(len(coauthors)-1)
             data[i].append(first)
