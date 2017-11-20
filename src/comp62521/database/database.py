@@ -379,6 +379,9 @@ class Database:
     def get_first_last_sole(self):
         header = ("Name", "First Author", "Last Author", "Sole Author")
         data = []
+        for i in range(len(self.authors)):
+            first, last, sole = self.first_last_author(self.authors[i].name)
+            data.append((self.authors[i].name, first, last, sole))
         return header, data
 
     def get_author_stats(self):
