@@ -153,10 +153,16 @@ class TestDatabase(unittest.TestCase):
         header, data = db.get_author_stats()
         self.assertEqual(len(header), len(data[0]),
             "header and data column size doesn't match")
-        first1, first2 = 1, 0
-        last1, last2 = 0, 1
-        coauthor = 1
-        self.assertEqual(data[0], [u'AUTHOR1',1, 0, 0, 0, 1, 1, 1, 0])
+        self.assertEqual(header, ("Author", "Number of conference papers",
+                  "Number of journals", "Number of books",
+                  "Number of book chapters", "Total publications", "Coauthors", "First", "Last"))
+        self.assertEqual(data[0], [u'AUTHOR1', 1, 0, 0, 0, 1, 1, 1, 0])
+        self.assertEqual(data[1], [u'AUTHOR2', 1, 0, 0, 0, 1, 1, 0, 1])
+
+    def test_get_first_last_sole_stats(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        header, data = db.get_first_last_sole()
 
 if __name__ == '__main__':
     unittest.main()
