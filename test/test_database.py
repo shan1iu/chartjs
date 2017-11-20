@@ -154,9 +154,15 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(len(header), len(data[0]),
             "header and data column size doesn't match")
         first1, first2 = 1, 0
+        last1, last2 = 0, 1
+        coauthor = 1
         data[0].append(first1)
         data[1].append(first2)
-        self.assertEqual(data[0], [u'AUTHOR1',1, 0, 0, 0, 1, 1, 0, 1])
+        data[0].append(last1)
+        data[1].append(last2)
+        data[0].append(coauthor)
+        data[1].append(coauthor)
+        self.assertEqual(data[0], [u'AUTHOR1',1, 0, 0, 0, 1, 1, 0, 1, 1])
 
 if __name__ == '__main__':
     unittest.main()
