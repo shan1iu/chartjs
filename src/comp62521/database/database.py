@@ -378,6 +378,9 @@ class Database:
             else:
                 return {""} if name == "" else {name + ": does not exist in any publication"}
 
+    def get_author_stats(self):
+        return self.get_publications_by_author()
+
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = [ "sub", "sup", "i", "tt", "ref" ]
