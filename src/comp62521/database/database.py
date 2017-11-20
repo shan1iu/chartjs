@@ -376,6 +376,8 @@ class Database:
                 last += 1
         return first, last, sole
 
+    def get_first_last_sole(self):
+        pass
 
     def get_author_stats(self):
         header, data = self.get_publications_by_author()
