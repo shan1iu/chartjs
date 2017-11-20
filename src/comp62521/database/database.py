@@ -362,21 +362,16 @@ class Database:
                     links.add((a, a2))
         return (nodes, links)
 
-    def first_last_author(self,name):
-            name = ' '.join(name.strip().split())
-            first = 0
-            last = 0
-            names = {author.name for author in self.authors}
-            if name.lower() in (name.lower() for name in names):
-                for pub in self.publications:
-                    if self.authors[pub.authors[0]].name.lower() == name.lower():
-                        first += 1
-                    if self.authors[pub.authors[len(pub.authors) - 1]].name.lower() == name.lower():
-                        last += 1
-                return "Stats for " + str(name), "Number of times first author = " + str(first), \
-                       "Number of times last author = " + str(last)
-            else:
-                return {""} if name == "" else {name + ": does not exist in any publication"}
+    def first_last_author(self, name):
+        name = ' '.join(name.strip().split())
+        first = 0
+        last = 0
+        for pub in self.publications:
+            if self.authors[pub.authors[0]].name.lower() == name.lower():
+                first += 1
+            if self.authors[pub.authors[len(pub.authors) - 1]].name.lower() == name.lower():
+                last += 1
+        return first, last
 
     def get_author_stats(self):
         return self.get_publications_by_author()
