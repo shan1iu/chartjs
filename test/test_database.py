@@ -167,6 +167,12 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(len(header), len(data[0]),
                          "header and data column size doesn't match")
         self.assertEqual(data[0], ("Stefano Ceri", 86, 33, 8))
+        self.assertEqual(data[4][1], 0,
+                         "The first authors ")
+        self.assertEqual(data[4][2], 2,
+                         "The last authors")
+        self.assertEqual(data[4][3], 0,
+                         "The sole author")
 
 
 if __name__ == '__main__':
