@@ -163,6 +163,7 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         header, data = db.get_first_last_sole()
+        self.assertEqual(header, ("Name", "First Author", "Last Author", "Sole Author"))
 
 if __name__ == '__main__':
     unittest.main()
