@@ -108,6 +108,14 @@ def showauthor_first():
     args["name"] = db.first_last_author(name)
     return render_template('author_first.html', args=args)
 
+@app.route("/author_stats")
+def show_author_stats():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset, "id": "author_stats"}
+    args['title'] = "Comprehensive Author Stats"
+    args["data"] = db.get_author_stats()
+    return render_template('author_stats.html', args=args)
 
 
 @app.route("/statisticsdetails/<status>")
