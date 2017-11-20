@@ -4,7 +4,7 @@
 
 <h1>{{ args.title }}</h1>
 
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for author.." title="Type in a name">
 
 <table id="myTable">
   <thead>
@@ -30,7 +30,7 @@
 function myFunction() {
   var input, filter, table, tr, td, i;
   input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
+  filter = input.value.trim().toUpperCase();
   table = document.getElementById("myTable");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
