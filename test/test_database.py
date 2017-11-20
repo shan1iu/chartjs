@@ -161,9 +161,13 @@ class TestDatabase(unittest.TestCase):
 
     def test_get_first_last_sole_stats(self):
         db = database.Database()
-        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
         header, data = db.get_first_last_sole()
         self.assertEqual(header, ("Name", "First Author", "Last Author", "Sole Author"))
+        self.assertEqual(len(header), len(data[0]),
+                         "header and data column size doesn't match")
+        self.assertEqual(data[0], ("Stefano Ceri", 86, 33, 8))
+
 
 if __name__ == '__main__':
     unittest.main()
