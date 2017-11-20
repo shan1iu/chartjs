@@ -94,20 +94,6 @@ def showStatisticsMenu():
     args = {"dataset":dataset}
     return render_template('statistics.html', args=args)
 
-
-
-@app.route("/author_first")
-def showauthor_first():
-    dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset":dataset, "id":"author_first"}
-    args['title'] = "Number of times author appears first and last"
-    name=""
-    if "name" in request.args:
-        name = request.args.get("name")
-    args["name"] = db.first_last_author(name)
-    return render_template('author_first.html', args=args)
-
 @app.route("/author_stats")
 def show_author_stats():
     dataset = app.config['DATASET']
@@ -139,5 +125,9 @@ def showPublicationSummary(status):
     if (status == "author_year"):
         args["title"] = "Author by Year"
         args["data"] = db.get_author_totals_by_year()
+
+    if (status == "author_first_last_sole"):
+        args["title"] = "First, Last and Sole "
+        args["data"] = db.get_first_last_sole()
 
     return render_template('statistics_details.html', args=args)
