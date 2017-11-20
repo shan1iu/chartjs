@@ -147,5 +147,10 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(data[0][1], 2,
             "incorrect number of authors in result")
 
+    def test_get_author_stats(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        header, data = db.get_author_stats()
+
 if __name__ == '__main__':
     unittest.main()
