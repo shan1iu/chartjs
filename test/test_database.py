@@ -156,7 +156,7 @@ class TestDatabase(unittest.TestCase):
         first1, first2 = 1, 0
         data[0].append(first1)
         data[1].append(first2)
-        self.assertEqual(data[0], [u'AUTHOR1',1, 0, 0, 0, 1, 1, 1])
+        self.assertEqual(data[0], [u'AUTHOR1',1, 0, 0, 0, 1, 1, 0, 1])
 
 if __name__ == '__main__':
     unittest.main()
