@@ -5,7 +5,6 @@ function sort(table) {
         (function (n) {
             var flag = true;
             headers[n].onclick = function () {
-                console.log(flag);
                 var tbody = table.tBodies[0];
                 var rows = tbody.getElementsByTagName("tr");
                 rows = Array.prototype.slice.call(rows, 0);
@@ -14,12 +13,9 @@ function sort(table) {
                     var cell2 = row2.getElementsByTagName("td")[n];
                     var val1 = cell1.textContent || cell1.innerText;
                     var val2 = cell2.textContent || cell2.innerText;
-                    if (!isNaN(parseInt(val1))) {
-                        val1 = parseInt(val1)
-                    }
-                    if (!isNaN(parseInt(val2))) {
-                        val2 = parseInt(val2)
-                    }
+                    // if it is a number then parse it into type number
+                    val1 = checkByExactValue(val1);
+                    val2 = checkByExactValue(val2);
                     if (val1 < val2) {
                         return -1;
                     } else if (val1 > val2) {
@@ -38,6 +34,28 @@ function sort(table) {
             }
         })(i)
     }
+}
+/**
+ *
+ * @param val
+ * @returns {*}
+ * 1. if val is number, parse it into type number
+ * 2. if val is string, get the last word
+ *  2.1 if last word is a number then drop it
+ *  2.2 if last word is "Jr."  then drop it
+ */
+function checkByExactValue(val) {
+    if (!isNaN(parseInt(val))) {
+        val = parseInt(val)
+    } else {
+        var val_list = val.split(" ");
+        val = val_list[val_list.length - 1];
+        if (!isNaN(parseInt(val)) || val === "Jr.") {
+            val = val_list[val_list.length - 2];
+        }
+        val = val.toLowerCase();
+    }
+    return val
 }
 
 window.onload = function () {
