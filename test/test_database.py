@@ -29,6 +29,22 @@ class TestDatabase(unittest.TestCase):
         # publications with missing titles should be added
         self.assertEqual(len(db.publications), 1)
 
+    def test_get_all_authors(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        self.assertEqual(db.get_all_authors(), [u'AUTHOR1', u'AUTHOR2'])
+
+    def test_get_coauthor_data(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        start = db.min_year
+        end = db.max_year
+        self.assertEqual(db.get_coauthor_data(start, end, 'wrong pub type'), (('Author', 'Co-Authors'), []))
+        self.assertEqual(db.get_coauthor_data(start, end, 0), (('Author', 'Co-Authors'), [[u'AUTHOR1 (1)',
+                                                                                           u'AUTHOR2 (1)'],
+                                                                                          [u'AUTHOR2 (1)',
+                                                                                           u'AUTHOR1 (1)']]))
+
     def test_get_average_authors_per_publication(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-1.xml")))
@@ -71,6 +87,20 @@ class TestDatabase(unittest.TestCase):
         # additional test for union of authors
         self.assertEqual(data[-1], [0, 2, 4, 5])
 
+    def test_get_publication_summary_average(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-4.xml")))
+        self.assertEqual(db.get_publication_summary_average(1), (('Details', 'Conference Paper','Journal','Book',
+                                                                  'Book Chapter', 'All Publications'),
+                                                                 [['Median authors per publication', 1.5, 0, 1, 0, 1],
+                                                                  ['Median publications per author', 2.0, 0.0, 0.0, 0.0,
+                                                                   2.0]]))
+        self.assertEqual(db.get_publication_summary_average(2), (('Details', 'Conference Paper', 'Journal', 'Book',
+                                                                  'Book Chapter', 'All Publications'),
+                                                                 [['Mode authors per publication', [1], [], [1], [], [1]],
+                                                                  ['Mode publications per author', [1.0], [0.0], [0.0],
+                                                                   [0.0], [2.0]]]))
+
     def test_get_publication_summary(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
@@ -111,6 +141,18 @@ class TestDatabase(unittest.TestCase):
             "incorrect number of authors")
         self.assertEqual(data[0][-1], 1,
             "incorrect total")
+
+    def test_get_average_authors_per_publication_by_year(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        self.assertEqual(db.get_average_authors_per_publication_by_year(2), (('Year','Conference papers','Journals',
+                                                                              'Books','Book chapters',
+                                                                              'All publications'),
+                                                                             [[9999, [2], [], [], [], [2]]]))
+        self.assertEqual(db.get_average_authors_per_publication_by_year(0), (('Year', 'Conference papers', 'Journals',
+                                                                              'Books', 'Book chapters',
+                                                                              'All publications'),
+                                                                             [[9999, 2.0, 0, 0, 0, 2.0]]))
 
     def test_get_average_publications_per_author_by_year(self):
         db = database.Database()
@@ -173,6 +215,11 @@ class TestDatabase(unittest.TestCase):
                          "The last authors")
         self.assertEqual(data[4][3], 0,
                          "The sole author")
+
+    def test_get_network_data(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        self.assertEqual(db.get_network_data(), ([[u'AUTHOR1', 1], [u'AUTHOR2', 1]], {(0, 1)}))
 
 
 if __name__ == '__main__':
