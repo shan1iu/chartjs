@@ -50,9 +50,6 @@ function checkByExactValue(val) {
     } else {
         var val_list = val.split(" ");
         val = val_list[val_list.length - 1];
-        if (!isNaN(parseInt(val)) || val === "Jr.") {
-            val = val_list[val_list.length - 2];
-        }
         val = val.toLowerCase();
     }
     return val

@@ -11,7 +11,7 @@ else:
     path, dataset = os.path.split(data_file)
     print "Database: path=%s name=%s" % (path, dataset)
     db = database.Database()
-    if db.read(data_file) == False:
+    if not db.read(data_file):
         sys.exit(1)
 
 app.config['DATASET'] = dataset

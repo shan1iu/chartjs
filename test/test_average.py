@@ -2,8 +2,8 @@ import unittest
 
 from comp62521.statistics import average
 
-class TestAverage(unittest.TestCase):
 
+class TestAverage(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -48,6 +48,7 @@ class TestAverage(unittest.TestCase):
 
     def test_mode_is_sorted_for_multiple_values(self):
         self.assertEqual(average.mode([2, 2, 1, 1]), [1, 2])
+
 
 if __name__ == '__main__':
     unittest.main()
