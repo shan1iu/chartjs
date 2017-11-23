@@ -75,7 +75,7 @@ class Database:
                             try:
                                 coauthors[a].add(a2)
                             except KeyError:
-                                coauthors[a] = set([a2])
+                                coauthors[a] = {a2}
         def display(db, coauthors, author_id):
             return "%s (%d)" % (db.authors[author_id].name, len(coauthors[author_id]))
 
@@ -226,7 +226,7 @@ class Database:
     def get_average_authors_per_publication_by_year(self, av):
         header = ("Year", "Conference papers",
             "Journals", "Books",
-            "Book chapers", "All publications")
+            "Book chapters", "All publications")
 
         ystats = {}
         for p in self.publications:
@@ -369,11 +369,13 @@ class Database:
         sole = 0
         for pub in self.publications:
             if self.authors[pub.authors[0]].name.lower() == name.lower():
-                first += 1
                 if len(pub.authors) == 1:
                     sole += 1
+                else:
+                    first += 1
             if self.authors[pub.authors[len(pub.authors) - 1]].name.lower() == name.lower():
-                last += 1
+                if len(pub.authors) != 1:
+                    last += 1
         return first, last, sole
 
     def get_first_last_sole(self):

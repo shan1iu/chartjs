@@ -191,15 +191,15 @@ class TestDatabase(unittest.TestCase):
 
     def test_get_author_stats(self):
         db = database.Database()
-        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        self.assertTrue(db.read(path.join(self.data_dir, "three-authors-and-three-publications.xml")))
         header, data = db.get_author_stats()
         self.assertEqual(len(header), len(data[0]),
             "header and data column size doesn't match")
         self.assertEqual(header, ("Author", "Number of conference papers",
                   "Number of journals", "Number of books",
                   "Number of book chapters", "Total publications", "Coauthors", "First", "Last"))
-        self.assertEqual(data[0], [u'AUTHOR1', 1, 0, 0, 0, 1, 1, 1, 0])
-        self.assertEqual(data[1], [u'AUTHOR2', 1, 0, 0, 0, 1, 1, 0, 1])
+        self.assertEqual(data[0], [u'author1', 2, 0, 0, 0, 2, 1, 1, 0])
+        self.assertEqual(data[1], [u'author2', 1, 0, 0, 0, 1, 1, 0, 1])
 
     def test_get_first_last_sole_stats(self):
         db = database.Database()
@@ -208,7 +208,7 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(header, ("Name", "First Author", "Last Author", "Sole Author"))
         self.assertEqual(len(header), len(data[0]),
                          "header and data column size doesn't match")
-        self.assertEqual(data[0], ("Stefano Ceri", 86, 33, 8))
+        self.assertEqual(data[0], ("Stefano Ceri", 78, 25, 8))
         self.assertEqual(data[4][1], 0,
                          "The first authors ")
         self.assertEqual(data[4][2], 2,
