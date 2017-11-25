@@ -11,17 +11,39 @@ function sort(table) {
                 rows.sort(function (row1, row2) {
                     var cell1 = row1.getElementsByTagName("td")[n];
                     var cell2 = row2.getElementsByTagName("td")[n];
+                    var author1 = row1.getElementsByTagName("td")[0];
+                    var author2 = row2.getElementsByTagName("td")[0];
                     var val1 = cell1.textContent || cell1.innerText;
                     var val2 = cell2.textContent || cell2.innerText;
+                    var val_author1 = author1.textContent || author1.innerText;
+                    var val_author2 = author2.textContent || author2.innerText;
                     // if it is a number then parse it into type number
                     val1 = checkByExactValue(val1);
                     val2 = checkByExactValue(val2);
+                    val_author1 = checkByExactValue(val_author1);
+                    val_author2 = checkByExactValue(val_author2);
                     if (val1 < val2) {
-                        return -1;
-                    } else if (val1 > val2) {
                         return 1;
+                    } else if (val1 > val2) {
+                        return -1;
                     } else {
-                        return 0;
+                        if (n !== 0) {
+                            if (val_author1 < val_author2) {
+                                if (flag)
+                                    return 1;
+                                else
+                                    return -1;
+                            } else if (val_author1 > val_author2) {
+                                if (flag)
+                                    return -1;
+                                else
+                                    return 1;
+                            } else {
+                                return 0;
+                            }
+                        } else {
+                            return 0;
+                        }
                     }
                 });
                 if (flag) {
