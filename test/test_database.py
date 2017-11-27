@@ -217,6 +217,96 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(data[4][3], 0,
                          "The sole author")
 
+    def test_get_first_author_stat(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        first = db.get_first_author_stat(db.publications, 'Stefano Ceri')
+        self.assertEqual(first, 78)
+        pubs = [pub for pub in db.publications if pub.pub_type == 2]
+        first = db.get_first_author_stat(pubs, 'Stefano Ceri')
+        self.assertEqual(first, 3)
+        pubs = [pub for pub in db.publications if pub.pub_type == 3]
+        first = db.get_first_author_stat(pubs, 'Stefano Ceri')
+        self.assertEqual(first, 4)
+
+    def test_get_last_author_stat(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        last = db.get_last_author_stat(db.publications, 'Stefano Ceri')
+        self.assertEqual(last, 25)
+
+    def test_get_sole_author_stat(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        last = db.get_sole_author_stat(db.publications, 'Stefano Ceri')
+        self.assertEqual(last, 8)
+
+    def test_get_all_author_stats(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        stats = db.get_all_author_stats('Stefano Ceri')
+        self.assertEqual(stats, (('Statistic', 'Conference Paper', 'Journal', 'Book', 'Book Chapter', 'Overall'),
+                                 [['Publication', 100, 94, 6, 18, 218], ['First', 28, 43, 3, 4, 78],
+                                  ['Last', 10, 10, 0, 5, 25], ['Sole', 7, 0, 0, 1, 8],
+                                  ['Coauthors', 110, 152, 14, 40, 230]]))
+
+    def test_get_author_pub_stat(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        count = db.get_author_pub_stat(db.publications, 'Stefano Ceri')
+        self.assertEqual(count, 218)
+
+    def test_get_coauthor_stat(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        count = db.get_coauthor_stat(db.publications, 'Stefano Ceri')
+        self.assertEqual(count, 230)
+
+    def test_get_matching_authors(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        authors = db.get_matching_authors('')
+        self.assertEqual(authors, '')
+        authors = db.get_matching_authors('Stefano Ceri')
+        self.assertEqual(authors, [[['Publication', 100, 94, 6, 18, 218], ['First', 28, 43, 3, 4, 78],
+                                    ['Last', 10, 10, 0, 5, 25], ['Sole', 7, 0, 0, 1, 8],
+                                    ['Coauthors', 110, 152, 14, 40, 230], u'Stefano Ceri']])
+        authors = db.get_matching_authors('Stefano')
+        self.assertEqual(authors, [u'Stefano Butti', u'Stefano Ceri',
+                                   u'Stefano Crespi-Reghizzi', u'Stefano Gevinti',
+                                   u'Stefano Paraboschi'])
+        authors = db.get_matching_authors('  Stefano  ')
+        self.assertEqual(authors, [u'Stefano Butti', u'Stefano Ceri',
+                                   u'Stefano Crespi-Reghizzi', u'Stefano Gevinti',
+                                   u'Stefano Paraboschi'])
+
+    def test_sort_authors_by_precedence(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        authors = db.sort_authors_by_precedence(["Brian Sam Alice", "Sam Alice", "Samuel Alice", "Alice Sam Brian",
+                                                 "Sam Brian", "Samuel Brian", "Alice Esam", 'Brian Esam', 'Alice Sam',
+                                                 'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
+                                                 'Brian Samming'], 'sam')
+        self.assertEqual(authors, ['Alice Sam', 'Brian Sam', 'Alice Sammer',
+                                   'Brian Sammer', 'Alice Samming', 'Brian Samming',
+                                   'Sam Alice', 'Sam Brian', 'Samuel Alice',
+                                   'Samuel Brian', 'Brian Sam Alice', 'Alice Sam Brian',
+                                   'Alice Esam', 'Brian Esam']
+)
+
+    def test_sort_author_group_by_name(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        authors = db.sort_authors_by_precedence(["Brian Sam Alice", "Sam Alice", "Samuel Alice", "Alice Sam Brian",
+                                                 "Sam Brian", "Samuel Brian", "Alice Esam", 'Brian Esam', 'Alice Sam',
+                                                 'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
+                                                 'Brian Samming'], 'sam')
+        authors = db.sort_author_group_by_name(authors, 2)
+        self.assertEqual(authors,
+                         ['Alice Sam Brian', 'Alice Esam', 'Alice Sam', 'Alice Sammer', 'Alice Samming',
+                          'Brian Sam Alice', 'Brian Esam', 'Brian Sam', 'Brian Sammer', 'Brian Samming', 'Sam Alice',
+                          'Sam Brian', 'Samuel Alice', 'Samuel Brian'])
+
     def test_get_network_data(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))

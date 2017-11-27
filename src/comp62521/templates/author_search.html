@@ -9,13 +9,38 @@ Author: <input type="search" name="name">
 </form>
 
 <table>
+    {%if args.data | length != 1 and args.data | length > 0 %}
     {% for data in args.data %}
     <tr>
-
-      <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data[10:] }}',
-        'MyWindow',width=600,height=200); return false;">{{ data }}</a></td>
+      <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data }}',
+        'MyWindow',width=600,height=200); return false;">Stats for {{ data }}</a></td>
 
     </tr>
     {% endfor %}
+    {% elif args.data | length == 1 %}
+    {% set header = ["Statistic", "Conference Paper", "Journal", "Book", "Book Chapter", "Overall"] %}
+    {% for name in args.data[0][args.data[0]|length-1:args.data[0]|length] %}
+    <h2>Stats for {{ name }}</h2>
+    {%endfor%}
+    <thead>
+    <tr>
+    {% for column in header %}
+      <th><input type="submit" value="{{ column }}"></th>
+    {% endfor %}
+    </tr>
+  </thead>
+    <tbody>
+    {% set data = args.data[0][0:args.data[0]|length - 1] %}
+    {%for row in data %}
+    <tr>
+        {% for data_item in row %}
+        <td>{{ data_item }}</td>
+        {% endfor %}
+    </tr>
+    </tbody>
+    {% endfor %}
+    {%else%}
+    <h2>That author does not exist</h2>
+    {% endif %}
 </table>
 {% endblock %}

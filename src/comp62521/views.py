@@ -105,6 +105,26 @@ def show_author_stats():
             "data": db.get_author_stats()}
     return render_template('author_stats.html', args=args)
 
+@app.route("/search")
+def search_for_author():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "id":"search"}
+    name = ""
+    args['title'] = "Search for Author"
+    if "name" in request.args:
+        name = request.args.get("name")
+    args["data"] = db.get_matching_authors(name)
+    return render_template('author_search.html', args=args)
+
+@app.route("/authorstatistics/<name>")
+def show_author_statiostics(name):
+   dataset = app.config['DATASET']
+   db = app.config['DATABASE']
+   args = {"dataset":dataset, "name":name}
+   args["title"] = "Comprehensive Statistics for " + name
+   args["data"] = db.get_all_author_stats(name)
+   return render_template('author_statistics.html', args=args)
 
 @app.route("/statisticsdetails/<status>")
 def showPublicationSummary(status):

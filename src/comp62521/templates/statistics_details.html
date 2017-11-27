@@ -21,8 +21,7 @@
       {% for data_item in row %}
       {% set rowloop = loop %}
       {% if loop.index == 1 %}
-            <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data_item }}',
-          'MyWindow',width=600,height=200); return false;">{{ data_item }}</a></td>
+        <td><a href="/authorstatistics/{{ data_item }}">{{ data_item }}</a></td>
       {% else %}
         <td>{{ data_item }}</td>
       {% endif %}
