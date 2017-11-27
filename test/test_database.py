@@ -235,6 +235,12 @@ class TestDatabase(unittest.TestCase):
         last = db.get_last_author_stat(db.publications, 'Stefano Ceri')
         self.assertEqual(last, 25)
 
+    def test_get_sole_author_stat(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        last = db.get_sole_author_stat(db.publications, 'Stefano Ceri')
+        self.assertEqual(last, 8)
+
     def test_get_all_author_stats(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
