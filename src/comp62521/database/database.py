@@ -488,6 +488,9 @@ class Database:
         out += [author for author in results if author not in out]
         return out
 
+    def sort_author_group_by_name(self, authors):
+        return sorted(authors, key=lambda name: (name.split()[0]))
+
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
