@@ -268,10 +268,11 @@ class TestDatabase(unittest.TestCase):
         authors = db.get_matching_authors('')
         self.assertEqual(authors, '')
         authors = db.get_matching_authors('Stefano Ceri')
-        self.assertEqual(authors, ['Stefano Ceri'])
+        self.assertEqual(authors, ['Stats for Stefano Ceri'])
         authors = db.get_matching_authors('Stefano')
-        self.assertEqual(authors, [u'Stefano Butti', u'Stefano Ceri', u'Stefano Crespi-Reghizzi', u'Stefano Gevinti',
-                                   u'Stefano Paraboschi'])
+        self.assertEqual(authors, [u'Stats for Stefano Butti', u'Stats for Stefano Ceri',
+                                   u'Stats for Stefano Crespi-Reghizzi', u'Stats for Stefano Gevinti',
+                                   u'Stats for Stefano Paraboschi'])
 
     def test_sort_authors_by_precedence(self):
         db = database.Database()
@@ -280,7 +281,12 @@ class TestDatabase(unittest.TestCase):
                                                  "Sam Brian", "Samuel Brian", "Alice Esam", 'Brian Esam', 'Alice Sam',
                                                  'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
                                                  'Brian Samming'], 'sam')
-        self.assertEqual(authors, ['Alice Sam', 'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming', 'Brian Samming', 'Sam Alice', 'Sam Brian', 'Samuel Alice', 'Samuel Brian', 'Brian Sam Alice', 'Alice Sam Brian', 'Alice Esam', 'Brian Esam'])
+        self.assertEqual(authors, ['Stats for Alice Sam', 'Stats for Brian Sam', 'Stats for Alice Sammer',
+                                   'Stats for Brian Sammer', 'Stats for Alice Samming', 'Stats for Brian Samming',
+                                   'Stats for Sam Alice', 'Stats for Sam Brian', 'Stats for Samuel Alice',
+                                   'Stats for Samuel Brian', 'Stats for Brian Sam Alice', 'Stats for Alice Sam Brian',
+                                   'Stats for Alice Esam', 'Stats for Brian Esam']
+)
 
     def test_sort_author_group_by_name(self):
         db = database.Database()
@@ -291,9 +297,11 @@ class TestDatabase(unittest.TestCase):
                                                  'Brian Samming'], 'sam')
         authors = db.sort_author_group_by_name(authors, 2)
         self.assertEqual(authors,
-                         ['Alice Sam Brian', 'Alice Esam', 'Alice Sam', 'Alice Sammer', 'Alice Samming',
-                          'Brian Sam Alice', 'Brian Esam', 'Brian Sam', 'Brian Sammer', 'Brian Samming', 'Sam Alice',
-                          'Sam Brian', 'Samuel Alice', 'Samuel Brian'])
+                         ['Stats for Sam Alice', 'Stats for Samuel Alice', 'Stats for Brian Sam Alice',
+                          'Stats for Sam Brian', 'Stats for Samuel Brian', 'Stats for Alice Sam Brian',
+                          'Stats for Alice Esam', 'Stats for Brian Esam', 'Stats for Alice Sam', 'Stats for Brian Sam',
+                          'Stats for Alice Sammer', 'Stats for Brian Sammer', 'Stats for Alice Samming',
+                          'Stats for Brian Samming'])
 
     def test_get_network_data(self):
         db = database.Database()
