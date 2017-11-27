@@ -412,6 +412,9 @@ class Database:
                     first += 1
         return first
 
+    def get_last_author_stat(self, pubs, name):
+        return 0
+
     def get_all_author_stats(self, name):
         name = ' '.join(name.strip().split())
         first= ["First"]
