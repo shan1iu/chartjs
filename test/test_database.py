@@ -221,7 +221,7 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
         first = db.get_first_author_stat('Stefano Ceri')
-        self.assertEqual(first, 0)
+        self.assertEqual(first, 78)
 
     def test_get_network_data(self):
         db = database.Database()
