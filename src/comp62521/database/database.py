@@ -465,7 +465,8 @@ class Database:
         if string == "":
             return ''
         else:
-            return [author for author in self.get_all_authors() if string.lower() in author.lower()]
+            return self.sort_authors_by_precedence([author for author in self.get_all_authors()
+                                                    if string.lower() in author.lower()], string)
 
     def sort_authors_by_precedence(self, results, string):
         out = []
