@@ -222,6 +222,12 @@ class TestDatabase(unittest.TestCase):
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
         first = db.get_first_author_stat(db.publications, 'Stefano Ceri')
         self.assertEqual(first, 78)
+        pubs = [pub for pub in db.publications if pub.pub_type == 2]
+        first = db.get_first_author_stat(pubs, 'Stefano Ceri')
+        self.assertEqual(first, 3)
+        pubs = [pub for pub in db.publications if pub.pub_type == 3]
+        first = db.get_first_author_stat(pubs, 'Stefano Ceri')
+        self.assertEqual(first, 4)
 
     def test_get_all_author_stats(self):
         db = database.Database()
