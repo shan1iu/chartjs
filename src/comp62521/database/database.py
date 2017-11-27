@@ -413,7 +413,12 @@ class Database:
         return first
 
     def get_last_author_stat(self, pubs, name):
-        return 0
+        last = 0
+        for p in pubs:
+            if self.authors[p.authors[len(p.authors) - 1]].name.lower() == name.lower():
+                if len(p.authors) != 1:
+                    last += 1
+        return last
 
     def get_all_author_stats(self, name):
         name = ' '.join(name.strip().split())
