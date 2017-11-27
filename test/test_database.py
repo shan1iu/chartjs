@@ -220,8 +220,9 @@ class TestDatabase(unittest.TestCase):
     def test_get_first_author_stat(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
-        first = db.get_first_author_stat('Stefano Ceri')
-        self.assertEqual(first, 78)
+        pubs = [pub for pub in db.publications if pub.pub_type == 0]
+        first = db.get_first_author_stat(pubs, 'Stefano Ceri')
+        self.assertEqual(first, 28)
 
     def test_get_network_data(self):
         db = database.Database()
