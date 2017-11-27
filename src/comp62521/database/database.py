@@ -467,6 +467,14 @@ class Database:
         else:
             return [author for author in self.get_all_authors() if string.lower() in author.lower()]
 
+    def sort_authors_by_precedence(self, results, string):
+        out = []
+        # last names
+        out += [author for author in results if string.lower() == author.split()[-1].lower()]
+        #  the rest
+        out += [author for author in results if author not in out]
+        return out
+
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
