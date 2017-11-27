@@ -12,7 +12,7 @@ Author: <input type="search" name="name">
     {% for data in args.data %}
     <tr>
 
-      <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data }}',
+      <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data[10:] }}',
         'MyWindow',width=600,height=200); return false;">{{ data }}</a></td>
 
     </tr>
