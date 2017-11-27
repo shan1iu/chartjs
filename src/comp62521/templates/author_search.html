@@ -9,7 +9,7 @@ Author: <input type="search" name="name">
 </form>
 
 <table>
-    {%if args.data | length != 1 %}
+    {%if args.data | length != 1 and args.data | length > 0 %}
     {% for data in args.data %}
     <tr>
       <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data }}',
@@ -17,7 +17,7 @@ Author: <input type="search" name="name">
 
     </tr>
     {% endfor %}
-    {% else %}
+    {% elif args.data | length == 1 %}
     {% set header = ["Statistic", "Conference Paper", "Journal", "Book", "Book Chapter", "Overall"] %}
     {% for name in args.data[0][args.data[0]|length-1:args.data[0]|length] %}
     <h2>Stats for {{ name }}</h2>
@@ -39,6 +39,8 @@ Author: <input type="search" name="name">
     </tr>
     </tbody>
     {% endfor %}
+    {%else%}
+    <h2>That author does not exist</h2>
     {% endif %}
 </table>
 {% endblock %}
