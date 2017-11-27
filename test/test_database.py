@@ -270,8 +270,9 @@ class TestDatabase(unittest.TestCase):
         authors = db.get_matching_authors('Stefano Ceri')
         self.assertEqual(authors, ['Stefano Ceri'])
         authors = db.get_matching_authors('Stefano')
-        self.assertEqual(authors, [u'Stefano Paraboschi', u'Stefano Crespi-Reghizzi', u'Stefano Butti',
-                                   u'Stefano Gevinti', u'Stefano Ceri'])
+        print authors
+        self.assertEqual(authors, [u'Stefano Butti', u'Stefano Ceri', u'Stefano Crespi-Reghizzi', u'Stefano Gevinti',
+                                   u'Stefano Paraboschi'])
 
     def test_sort_authors_by_precedence(self):
         db = database.Database()
