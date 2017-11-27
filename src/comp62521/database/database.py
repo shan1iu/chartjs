@@ -405,7 +405,12 @@ class Database:
         return header, data
 
     def get_first_author_stat(self, name):
-        return 0
+        first = 0
+        for p in self.publications:
+            if self.authors[p.authors[0]].name.lower() == name.lower():
+                if len(p.authors) != 1:
+                    first += 1
+        return first
 
 
 class DocumentHandler(handler.ContentHandler):
