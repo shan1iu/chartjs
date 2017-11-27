@@ -217,7 +217,7 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(data[4][3], 0,
                          "The sole author")
 
-    def get_test_get_first_author_stat(self):
+    def test_get_first_author_stat(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
         first = db.get_first_author_stat('Stefano Ceri')
