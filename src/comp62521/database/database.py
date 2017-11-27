@@ -473,6 +473,11 @@ class Database:
         out += [author for author in results if string.lower() == author.split()[-1].lower()]
         out += [author for author in results if string.lower() in author.split()[-1].lower()
              and author.split()[-1].lower().find(string.lower()) == 0 and author not in out]
+        # first names
+        out += [author for author in results
+                                         if string.lower() == author.split()[0].lower()]
+        out += [author for author in results if string.lower() in author.split()[0].lower()
+             and author.split()[0].lower().find(string.lower()) == 0 and author not in out]
         #  the rest
         out += [author for author in results if author not in out]
         return out
