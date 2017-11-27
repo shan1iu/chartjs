@@ -269,6 +269,8 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(authors, '')
         authors = db.get_matching_authors('Stefano Ceri')
         self.assertEqual(authors, ['Stefano Ceri'])
+        authors = db.get_matching_authors('Stefano')
+        self.assertEqual(authors, [u'Stefano Paraboschi', u'Stefano Crespi-Reghizzi', u'Stefano Butti', u'Stefano Gevinti', u'Stefano Ceri'])
 
     def test_get_network_data(self):
         db = database.Database()
