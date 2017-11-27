@@ -245,7 +245,10 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
         stats = db.get_all_author_stats('Stefano Ceri')
-        self.assertEqual(stats, [['Publication', 100, 94, 6, 18, 218], ['First', 28, 43, 3, 4, 78], ['Last', 10, 10, 0, 5, 25], ['Sole', 7, 0, 0, 1, 8], ['Coauthors', 110, 152, 14, 40, 230]])
+        self.assertEqual(stats, (('Statistic', 'Conference Paper', 'Journal', 'Book', 'Book Chapter', 'Overall'),
+                                 [['Publication', 100, 94, 6, 18, 218], ['First', 28, 43, 3, 4, 78],
+                                  ['Last', 10, 10, 0, 5, 25], ['Sole', 7, 0, 0, 1, 8],
+                                  ['Coauthors', 110, 152, 14, 40, 230]]))
 
     def test_get_author_pub_stat(self):
         db = database.Database()
