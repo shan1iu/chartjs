@@ -9,13 +9,33 @@ Author: <input type="search" name="name">
 </form>
 
 <table>
+    {%if args.data | length != 1 %}
     {% for data in args.data %}
     <tr>
-
       <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data }}',
         'MyWindow',width=600,height=200); return false;">Stats for {{ data }}</a></td>
 
     </tr>
     {% endfor %}
+    {% else %}
+    {% set header = ["Statistic", "Conference Paper", "Journal", "Book", "Book Chapter", "Overall"] %}
+
+    <thead>
+    <tr>
+    {% for column in header %}
+      <th><input type="submit" value="{{ column }}"></th>
+    {% endfor %}
+    </tr>
+  </thead>
+    <tbody>
+    {%for row in args.data[0] %}
+    <tr>
+        {% for data_item in row %}
+        <td>{{ data_item }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
 </table>
 {% endblock %}
