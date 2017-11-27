@@ -462,6 +462,7 @@ class Database:
         return header, [publications, first, last, sole, coauthor]
 
     def get_matching_authors(self, string):
+        string = ' '.join(string.strip().split())
         if string == "":
             return ''
         else:
