@@ -253,6 +253,12 @@ class TestDatabase(unittest.TestCase):
         count = db.get_author_pub_stat(db.publications, 'Stefano Ceri')
         self.assertEqual(count, 218)
 
+    def test_get_coauthor_stat(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        count = db.get_coauthor_stat(db.publications, 'Stefano Ceri')
+        self.assertEqual(count, 230)
+
     def test_get_network_data(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
