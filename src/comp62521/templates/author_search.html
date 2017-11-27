@@ -19,7 +19,9 @@ Author: <input type="search" name="name">
     {% endfor %}
     {% else %}
     {% set header = ["Statistic", "Conference Paper", "Journal", "Book", "Book Chapter", "Overall"] %}
-
+    {% for name in args.data[0][args.data[0]|length-1:args.data[0]|length] %}
+    <h2>Stats for {{ name }}</h2>
+    {%endfor%}
     <thead>
     <tr>
     {% for column in header %}
@@ -28,14 +30,15 @@ Author: <input type="search" name="name">
     </tr>
   </thead>
     <tbody>
-    {%for row in args.data[0] %}
+    {% set data = args.data[0][0:args.data[0]|length - 1] %}
+    {%for row in data %}
     <tr>
         {% for data_item in row %}
         <td>{{ data_item }}</td>
         {% endfor %}
     </tr>
+    </tbody>
     {% endfor %}
     {% endif %}
-    </tbody>
 </table>
 {% endblock %}
