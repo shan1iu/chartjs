@@ -281,9 +281,7 @@ class TestDatabase(unittest.TestCase):
                                                  'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
                                                  'Brian Samming'], 'sam')
         print authors
-        self.assertEqual(authors, ['Alice Sam', 'Brian Sam', 'Brian Sam Alice', 'Sam Alice', 'Samuel Alice',
-                                   'Alice Sam Brian', 'Sam Brian', 'Samuel Brian', 'Alice Esam', 'Brian Esam',
-                                   'Alice Sammer', 'Brian Sammer', 'Alice Samming', 'Brian Samming'])
+        self.assertEqual(authors, ['Alice Sam', 'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming', 'Brian Samming', 'Brian Sam Alice', 'Sam Alice', 'Samuel Alice', 'Alice Sam Brian', 'Sam Brian', 'Samuel Brian', 'Alice Esam', 'Brian Esam'])
 
 
     def test_get_network_data(self):
