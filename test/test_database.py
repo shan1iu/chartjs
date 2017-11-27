@@ -267,6 +267,8 @@ class TestDatabase(unittest.TestCase):
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
         authors = db.get_matching_authors('')
         self.assertEqual(authors, '')
+        authors = db.get_matching_authors('Stefano Ceri')
+        self.assertEqual(authors, ['Stefano Ceri'])
 
     def test_get_network_data(self):
         db = database.Database()
