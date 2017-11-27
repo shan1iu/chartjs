@@ -420,6 +420,14 @@ class Database:
                     last += 1
         return last
 
+    def get_sole_author_stat(self, pubs, name):
+        sole = 0
+        for p in pubs:
+            if self.authors[p.authors[0]].name.lower() == name.lower():
+                if len(p.authors) == 1:
+                    sole += 1
+        return sole
+
     def get_all_author_stats(self, name):
         name = ' '.join(name.strip().split())
         data = []
