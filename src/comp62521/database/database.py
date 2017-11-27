@@ -439,12 +439,14 @@ class Database:
     def get_all_author_stats(self, name):
         name = ' '.join(name.strip().split())
         data = []
-        first, last, sole = ["First"], ["Last"], ["Sole"]
+        publications, first, last, sole = ["Publication"], ["First"], ["Last"], ["Sole"]
         for i in range(5):
             pubs = [pub for pub in self.publications if pub.pub_type == i or i == 4]
+            publications.append(self.get_author_pub_stat(pubs, name))
             first.append(self.get_first_author_stat(pubs, name))
             last.append(self.get_last_author_stat(pubs, name))
             sole.append(self.get_sole_author_stat(pubs, name))
+        data.append(publications)
         data.append(first)
         data.append(last)
         data.append(sole)
