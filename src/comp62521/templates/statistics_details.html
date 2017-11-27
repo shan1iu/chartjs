@@ -6,20 +6,33 @@
 
 <table>
   <thead>
-    <tr>
+  <tr>
     {% for column in args.data[0] %}
-      <th><input type="submit" value="{{ column }}"></th>
+    <th><input type="submit" value="{{ column }}"></th>
     {% endfor %}
-    </tr>
+  </tr>
   </thead>
 
   <tbody>
   {% for row in args.data[1] %}
-    <tr>
-    {% for data_item in row %}
+  <tr>
+    <!-- if : there are author in the tables, add links to author column-->
+    {% if args.title == "Author Publication" or args.title == "First, Last and Sole " %}
+      {% for data_item in row %}
+      {% set rowloop = loop %}
+      {% if loop.index == 1 %}
+        <td><a href="/author/{{ data_item }}">{{ data_item }}</a></td>
+      {% else %}
+        <td>{{ data_item }}</td>
+      {% endif %}
+      {% endfor %}
+    <!-- else : there is no author in the table -->
+    {% else %}
+      {% for data_item in row %}
       <td>{{ data_item }}</td>
-    {% endfor %}
-    </tr>
+      {% endfor %}
+    {% endif %}
+  </tr>
   {% endfor %}
   </tbody>
 </table>
