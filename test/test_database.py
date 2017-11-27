@@ -280,7 +280,9 @@ class TestDatabase(unittest.TestCase):
                                                  "Sam Brian", "Samuel Brian", "Alice Esam", 'Brian Esam', 'Alice Sam',
                                                  'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
                                                  'Brian Samming'], 'sam')
-        self.assertEqual(authors, ['Alice Sam', 'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming', 'Brian Samming', 'Sam Alice', 'Sam Brian', 'Samuel Alice', 'Samuel Brian', 'Brian Sam Alice', 'Alice Sam Brian', 'Alice Esam', 'Brian Esam'])
+        print authors
+        self.assertEqual(authors, ['Alice Sam', 'Brian Sam', 'Alice Sammer', 'Alice Samming', 'Brian Sammer', 'Brian Samming', 'Sam Alice', 'Sam Brian', 'Samuel Alice', 'Samuel Brian', 'Alice Sam Brian', 'Brian Sam Alice', 'Alice Esam', 'Brian Esam']
+                         )
 
     def test_sort_author_group_by_name(self):
         db = database.Database()
@@ -290,7 +292,6 @@ class TestDatabase(unittest.TestCase):
                                                  'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
                                                  'Brian Samming'], 'sam')
         authors = db.sort_author_group_by_name(authors)
-        print authors
         self.assertEqual(authors,
                          ['Alice Sam', 'Alice Sammer', 'Alice Samming', 'Alice Sam Brian', 'Alice Esam', 'Brian Sam',
                           'Brian Sammer', 'Brian Samming', 'Brian Sam Alice', 'Brian Esam', 'Sam Alice', 'Sam Brian',
