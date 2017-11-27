@@ -406,7 +406,8 @@ class Database:
 
     def get_first_author_stat(self, name):
         first = 0
-        for p in self.publications:
+        pubs = [pub for pub in self.publications if pub.pub_type == 0]
+        for p in pubs:
             if self.authors[p.authors[0]].name.lower() == name.lower():
                 if len(p.authors) != 1:
                     first += 1
