@@ -462,7 +462,10 @@ class Database:
         return header, [publications, first, last, sole, coauthor]
 
     def get_matching_authors(self, string):
-        return ''
+        if string == "":
+            return ''
+        else:
+            return [author for author in self.get_all_authors() if string.lower() == author.lower()]
 
 
 class DocumentHandler(handler.ContentHandler):
