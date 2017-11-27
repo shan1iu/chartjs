@@ -471,29 +471,33 @@ class Database:
         out = []
         # last names
         out += self.sort_author_group_by_name([author for author in results
-                                         if string.lower() == author.split()[-1].lower()])
+                                         if string.lower() == author.split()[-1].lower()], 0)
         out += self.sort_author_group_by_name(
             [author for author in results if string.lower() in author.split()[-1].lower()
-             and author.split()[-1].lower().find(string.lower()) == 0 and author not in out])
+             and author.split()[-1].lower().find(string.lower()) == 0 and author not in out], 1)
         # first names
         out += self.sort_author_group_by_name([author for author in results
-                                         if string.lower() == author.split()[0].lower()])
+                                         if string.lower() == author.split()[0].lower()], 1)
         out += self.sort_author_group_by_name(
             [author for author in results if string.lower() in author.split()[0].lower()
-             and author.split()[0].lower().find(string.lower()) == 0 and author not in out])
+             and author.split()[0].lower().find(string.lower()) == 0 and author not in out], 2)
         # middle names
         out += self.sort_author_group_by_name([author for author in results
-                                         if string.lower() in [x.lower() for x in author.split()[1:-1]]])
+                                         if string.lower() in [x.lower() for x in author.split()[1:-1]]], 1)
         # string at index 1 in last name
         out += self.sort_author_group_by_name([author for author in results if string.lower() in author.split()[-1].lower()
-                                         and author.split()[-1].lower().find(string.lower()) == 1])
+                                         and author.split()[-1].lower().find(string.lower()) == 1], 0)
         #  the rest
-        out += self.sort_author_group_by_name([author for author in results if author not in out])
-        return out
+        out += self.sort_author_group_by_name([author for author in results if author not in out], 1)
         return out
 
-    def sort_author_group_by_name(self, authors):
-        return sorted(authors, key=lambda name: (name.split()[0]))
+    def sort_author_group_by_name(self, authors, sort_type):
+        if sort_type == 0:
+            return sorted(authors, key=lambda name: (name.split()[0]))
+        elif sort_type == 1:
+            return sorted(authors, key=lambda name: (name.split()[-1], name.split()[0]))
+        else:
+            return sorted(authors, key=lambda name: (name.split()[0], name.split()[-1]))
 
 
 class DocumentHandler(handler.ContentHandler):
