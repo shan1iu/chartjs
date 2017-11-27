@@ -449,6 +449,7 @@ class Database:
         return count
 
     def get_all_author_stats(self, name):
+        header = ("Statistic", "Conference Paper", "Journal", "Book", "Book Chapter", "Overall")
         name = ' '.join(name.strip().split())
         data = []
         publications, first, last, sole, coauthor = ["Publication"], ["First"], ["Last"], ["Sole"], ["Coauthors"]
@@ -464,7 +465,7 @@ class Database:
         data.append(last)
         data.append(sole)
         data.append(coauthor)
-        return data
+        return header, data
 
 
 class DocumentHandler(handler.ContentHandler):
