@@ -133,3 +133,13 @@ def showPublicationSummary(status):
         args["data"] = db.get_first_last_sole()
 
     return render_template('statistics_details.html', args=args)
+
+
+@app.route("/authorstatistics/<name>")
+def show_author_statiostics(name):
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "name":name}
+    args["title"] = "Comprehensive Statistics for " + name
+    args["data"] = db.get_all_author_stats(name)
+    return render_template('author_statistics.html', args=args)
