@@ -470,6 +470,7 @@ class Database:
 
     def sort_authors_by_precedence(self, results, string):
         out = []
+        description = 'Stats for '
         # last names
         out += self.sort_author_group_by_name([author for author in results
                                          if string.lower() == author.split()[-1].lower()], 0)
@@ -490,7 +491,7 @@ class Database:
                                          and author.split()[-1].lower().find(string.lower()) == 1], 0)
         #  the rest
         out += self.sort_author_group_by_name([author for author in results if author not in out], 1)
-        return out
+        return [description + x for x in out]
 
     def sort_author_group_by_name(self, authors, sort_type):
         if sort_type == 0:
