@@ -428,6 +428,14 @@ class Database:
                     sole += 1
         return sole
 
+    def get_author_pub_stat(self, pubs, name):
+        count = 0
+        for p in pubs:
+            for a in p.authors:
+                if self.authors[a].name.lower() == name.lower():
+                    count += 1
+        return count
+
     def get_all_author_stats(self, name):
         name = ' '.join(name.strip().split())
         data = []
