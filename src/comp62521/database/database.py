@@ -465,7 +465,7 @@ class Database:
         if string == "":
             return ''
         else:
-            return [author for author in self.get_all_authors() if string.lower() == author.lower()]
+            return [author for author in self.get_all_authors() if string.lower() in author.lower()]
 
 
 class DocumentHandler(handler.ContentHandler):
