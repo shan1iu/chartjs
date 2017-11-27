@@ -478,6 +478,12 @@ class Database:
                                          if string.lower() == author.split()[0].lower()]
         out += [author for author in results if string.lower() in author.split()[0].lower()
              and author.split()[0].lower().find(string.lower()) == 0 and author not in out]
+        # middle names
+        out += [author for author in results
+                                         if string.lower() in [x.lower() for x in author.split()[1:-1]]]
+		# string at index 1 in last name
+        out += [author for author in results if string.lower() in author.split()[-1].lower()
+                                         and author.split()[-1].lower().find(string.lower()) == 1]
         #  the rest
         out += [author for author in results if author not in out]
         return out
