@@ -404,6 +404,63 @@ class Database:
             data[i].append(last)
         return header, data
 
+    def get_first_author_stat(self, pubs, name):
+        first = 0
+        for p in pubs:
+            if self.authors[p.authors[0]].name.lower() == name.lower():
+                if len(p.authors) != 1:
+                    first += 1
+        return first
+
+    def get_last_author_stat(self, pubs, name):
+        last = 0
+        for p in pubs:
+            if self.authors[p.authors[len(p.authors) - 1]].name.lower() == name.lower():
+                if len(p.authors) != 1:
+                    last += 1
+        return last
+
+    def get_sole_author_stat(self, pubs, name):
+        sole = 0
+        for p in pubs:
+            if self.authors[p.authors[0]].name.lower() == name.lower():
+                if len(p.authors) == 1:
+                    sole += 1
+        return sole
+
+    def get_author_pub_stat(self, pubs, name):
+        count = 0
+        for p in pubs:
+            for a in p.authors:
+                if self.authors[a].name.lower() == name.lower():
+                    count += 1
+        return count
+
+    def get_coauthor_stat(self, pubs, name):
+        count = 0
+        coauthors = set()
+        for p in pubs:
+            for a in p.authors:
+                if self.authors[a].name.lower() == name.lower():
+                    for a2 in p.authors:
+                        if a != a2:
+                            coauthors.add(a2)
+        count += len(coauthors)
+        return count
+
+    def get_all_author_stats(self, name):
+        header = ("Statistic", "Conference Paper", "Journal", "Book", "Book Chapter", "Overall")
+        name = ' '.join(name.strip().split())
+        publications, first, last, sole, coauthor = ["Publication"], ["First"], ["Last"], ["Sole"], ["Coauthors"]
+        for i in range(5):
+            pubs = [pub for pub in self.publications if pub.pub_type == i or i == 4]
+            publications.append(self.get_author_pub_stat(pubs, name))
+            first.append(self.get_first_author_stat(pubs, name))
+            last.append(self.get_last_author_stat(pubs, name))
+            sole.append(self.get_sole_author_stat(pubs, name))
+            coauthor.append(self.get_coauthor_stat(pubs, name))
+        return header, [publications, first, last, sole, coauthor]
+
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
