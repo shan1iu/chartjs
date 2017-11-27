@@ -404,6 +404,9 @@ class Database:
             data[i].append(last)
         return header, data
 
+    def get_first_author_stat(self, name):
+        return 0
+
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
