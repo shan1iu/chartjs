@@ -280,8 +280,22 @@ class TestDatabase(unittest.TestCase):
                                                  "Sam Brian", "Samuel Brian", "Alice Esam", 'Brian Esam', 'Alice Sam',
                                                  'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
                                                  'Brian Samming'], 'sam')
-        print authors
         self.assertEqual(authors, ['Alice Sam', 'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming', 'Brian Samming', 'Sam Alice', 'Sam Brian', 'Samuel Alice', 'Samuel Brian', 'Brian Sam Alice', 'Alice Sam Brian', 'Alice Esam', 'Brian Esam'])
+
+    def test_sort_author_group_by_name(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        authors = db.sort_authors_by_precedence(["Brian Sam Alice", "Sam Alice", "Samuel Alice", "Alice Sam Brian",
+                                                 "Sam Brian", "Samuel Brian", "Alice Esam", 'Brian Esam', 'Alice Sam',
+                                                 'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
+                                                 'Brian Samming'], 'sam')
+        authors = db.sort_author_group_by_name(authors)
+        print authors
+        self.assertEqual(authors,
+                         ['Alice Sam', 'Alice Sammer', 'Alice Samming', 'Alice Sam Brian', 'Alice Esam', 'Brian Sam',
+                          'Brian Sammer', 'Brian Samming', 'Brian Sam Alice', 'Brian Esam', 'Sam Alice', 'Sam Brian',
+                          'Samuel Alice', 'Samuel Brian']
+                         )
 
     def test_get_network_data(self):
         db = database.Database()
