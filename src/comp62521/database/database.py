@@ -461,6 +461,9 @@ class Database:
             coauthor.append(self.get_coauthor_stat(pubs, name))
         return header, [publications, first, last, sole, coauthor]
 
+    def get_matching_authors(self, string):
+        return ''
+
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
