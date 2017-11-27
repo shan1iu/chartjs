@@ -492,6 +492,7 @@ class Database:
         out += self.sort_author_group_by_name([author for author in results if author not in out], 1)
         if len(out) == 1:
             _, data = self.get_all_author_stats(out[0])
+            data.append(out[0])
             return [data]
         else:
             return out
