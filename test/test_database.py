@@ -270,7 +270,21 @@ class TestDatabase(unittest.TestCase):
         authors = db.get_matching_authors('Stefano Ceri')
         self.assertEqual(authors, ['Stefano Ceri'])
         authors = db.get_matching_authors('Stefano')
-        self.assertEqual(authors, [u'Stefano Paraboschi', u'Stefano Crespi-Reghizzi', u'Stefano Butti', u'Stefano Gevinti', u'Stefano Ceri'])
+        self.assertEqual(authors, [u'Stefano Paraboschi', u'Stefano Crespi-Reghizzi', u'Stefano Butti',
+                                   u'Stefano Gevinti', u'Stefano Ceri'])
+
+    def test_sort_authors_by_precedence(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        authors = db.sort_authors_by_precedence(["Brian Sam Alice", "Sam Alice", "Samuel Alice", "Alice Sam Brian",
+                                                 "Sam Brian", "Samuel Brian", "Alice Esam", 'Brian Esam', 'Alice Sam',
+                                                 'Brian Sam', 'Alice Sammer', 'Brian Sammer', 'Alice Samming',
+                                                 'Brian Samming'], 'sam')
+        print authors
+        self.assertEqual(authors, ['Alice Sam', 'Brian Sam', 'Brian Sam Alice', 'Sam Alice', 'Samuel Alice',
+                                   'Alice Sam Brian', 'Sam Brian', 'Samuel Brian', 'Alice Esam', 'Brian Esam',
+                                   'Alice Sammer', 'Brian Sammer', 'Alice Samming', 'Brian Samming'])
+
 
     def test_get_network_data(self):
         db = database.Database()
