@@ -270,8 +270,12 @@ class TestDatabase(unittest.TestCase):
         authors = db.get_matching_authors('Stefano Ceri')
         self.assertEqual(authors, [[['Publication', 100, 94, 6, 18, 218], ['First', 28, 43, 3, 4, 78],
                                     ['Last', 10, 10, 0, 5, 25], ['Sole', 7, 0, 0, 1, 8],
-                                    ['Coauthors', 110, 152, 14, 40, 230]]])
+                                    ['Coauthors', 110, 152, 14, 40, 230], u'Stefano Ceri']])
         authors = db.get_matching_authors('Stefano')
+        self.assertEqual(authors, [u'Stefano Butti', u'Stefano Ceri',
+                                   u'Stefano Crespi-Reghizzi', u'Stefano Gevinti',
+                                   u'Stefano Paraboschi'])
+        authors = db.get_matching_authors('  Stefano  ')
         self.assertEqual(authors, [u'Stefano Butti', u'Stefano Ceri',
                                    u'Stefano Crespi-Reghizzi', u'Stefano Gevinti',
                                    u'Stefano Paraboschi'])
