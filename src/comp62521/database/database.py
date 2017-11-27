@@ -436,6 +436,18 @@ class Database:
                     count += 1
         return count
 
+    def get_coauthor_stat(self, pubs, name):
+        count = 0
+        coauthors = set()
+        for p in pubs:
+            for a in p.authors:
+                if self.authors[a].name.lower() == name.lower():
+                    for a2 in p.authors:
+                        if a != a2:
+                            coauthors.add(a2)
+        count += len(coauthors)
+        return count
+
     def get_all_author_stats(self, name):
         name = ' '.join(name.strip().split())
         data = []
