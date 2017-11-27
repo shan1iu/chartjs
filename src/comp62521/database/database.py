@@ -404,16 +404,20 @@ class Database:
             data[i].append(last)
         return header, data
 
-    def get_first_author_stat(self, name):
-        first = []
+    def get_first_author_stat(self, pubs, name):
+        first = 0
+        for p in pubs:
+            if self.authors[p.authors[0]].name.lower() == name.lower():
+                if len(p.authors) != 1:
+                    first += 1
+        return first
+
+    def get_all_author_stats(self, name):
+        name = ' '.join(name.strip().split())
+        first= ["First"]
         for i in range(5):
-            count = 0
             pubs = [pub for pub in self.publications if pub.pub_type == i or i == 4]
-            for p in pubs:
-                if self.authors[p.authors[0]].name.lower() == name.lower():
-                    if len(p.authors) != 1:
-                        count += 1
-            first.append(count)
+            first.append(self.get_first_author_stat(pubs, name))
         return first
 
 
