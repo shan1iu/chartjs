@@ -517,6 +517,9 @@ class Database:
                         network[author].add(coauthor)
         return network
 
+    def get_all_author_network_graph(self):
+        return 0
+
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
     PUB_TYPE = {
