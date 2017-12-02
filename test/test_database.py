@@ -343,7 +343,10 @@ class TestDatabase(unittest.TestCase):
         self.assertTrue(db.read(path.join(self.data_dir, "publications_small_sample.xml")))
         graph = db.get_all_author_network_graph()
         paths = db.get_all_shortest_paths(graph, 'Sean Bechhofer', 'Simon Harper')
-        self.assertEqual(paths, None)
+        self.assertEqual(paths, [[u'Sean Bechhofer', u'Yeliz Yesilada', u'Simon Harper'],
+                                 [u'Sean Bechhofer', u'Carole A. Goble', u'Simon Harper']])
+        paths = db.get_all_shortest_paths(graph, 'Stefano Cero', 'Deji')
+        self.assertEqual(paths, [])
 
     def test_get_network_data(self):
         db = database.Database()
