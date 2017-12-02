@@ -337,6 +337,8 @@ class TestDatabase(unittest.TestCase):
         graph = db.get_all_author_network_graph()
         degree = db.get_degree_of_separation(graph, 'author1', 'author3')
         self.assertEqual(degree, None)
+        degree = db.get_degree_of_separation(graph, 'author1', 'author4')
+        self.assertEqual(degree, None)
 
     def test_get_all_shortest_paths(self):
         db = database.Database()
