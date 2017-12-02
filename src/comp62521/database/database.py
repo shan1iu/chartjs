@@ -531,7 +531,16 @@ class Database:
                 return self.author_idx[a]
 
     def get_degree_of_separation(self, network, author1, author2):
-        return 0
+        author1 = self.get_author_id(author1)
+        author2 = self.get_author_id(author2)
+        if author1 is None or author2 is None:
+            degree = None
+        else:
+            try:
+                degree = len(nx.shortest_path(network, author1, author2)) - 2
+            except:
+                degree = None
+        return degree
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
