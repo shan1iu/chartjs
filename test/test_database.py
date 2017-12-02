@@ -338,6 +338,13 @@ class TestDatabase(unittest.TestCase):
         degree = db.get_degree_of_separation(graph, 'author1', 'author3')
         self.assertEqual(degree, None)
 
+    def test_get_all_shortest_paths(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "publications_small_sample.xml")))
+        graph = db.get_all_author_network_graph()
+        paths = db.get_all_shortest_paths(graph, 'Sean Bechhofer', 'Simon Harper')
+        self.assertEqual(paths, None)
+
     def test_get_network_data(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
