@@ -520,7 +520,9 @@ class Database:
 
     def get_all_author_network_graph(self):
         network = self.get_all_author_network()
+        names = {id: self.authors[id].name for id in network.keys()}
         graph = nx.Graph(network)
+        nx.set_node_attributes(graph, 'name', names)
         return graph
 
 class DocumentHandler(handler.ContentHandler):
