@@ -313,10 +313,17 @@ class TestDatabase(unittest.TestCase):
         network = db.get_all_author_network()
         self.assertEqual(network, {0 : {1}, 1: {0}})
 
+    def test_get_all_author_network_graph(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        graph = db.get_all_author_network_graph()
+        self.assertEqual(graph, 0)
+
     def test_get_network_data(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         self.assertEqual(db.get_network_data(), ([[u'AUTHOR1', 1], [u'AUTHOR2', 1]], {(0, 1)}))
+
 
 
 if __name__ == '__main__':
