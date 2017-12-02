@@ -542,6 +542,9 @@ class Database:
                 degree = None
         return degree
 
+    def get_all_shortest_paths(self, graph, source, target):
+        return None
+
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
     PUB_TYPE = {
