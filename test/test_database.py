@@ -335,8 +335,8 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "three-authors-and-three-publications.xml")))
         graph = db.get_all_author_network_graph()
-        degree = db.get_degree_of_separation(graph, 'author1', 'author2')
-        self.assertEqual(degree, 0)
+        degree = db.get_degree_of_separation(graph, 'author1', 'author3')
+        self.assertEqual(degree, None)
 
     def test_get_network_data(self):
         db = database.Database()
