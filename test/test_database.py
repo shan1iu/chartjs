@@ -314,13 +314,16 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(network, {0 : {1}, 1: {0}})
 
     def test_get_all_author_network_graph(self):
+        import networkx as nx
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         graph = db.get_all_author_network_graph()
         nodes = graph.nodes()
-        edges = graph.edges()
         self.assertEqual(nodes, [0, 1])
+        edges = graph.edges()
         self.assertEqual(edges, [(0, 1)])
+        attributes = nx.get_node_attributes(graph, 'name')
+        self.assertEqual(attributes, {0: u'AUTHOR1', 1: u'AUTHOR2'})
 
     def test_get_network_data(self):
         db = database.Database()
