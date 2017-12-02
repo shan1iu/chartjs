@@ -525,6 +525,9 @@ class Database:
         nx.set_node_attributes(graph, 'name', names)
         return graph
 
+    def get_author_id(self, name):
+        return 0
+
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
     PUB_TYPE = {
