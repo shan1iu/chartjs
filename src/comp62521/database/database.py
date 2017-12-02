@@ -507,10 +507,14 @@ class Database:
             return sorted(authors, key=lambda name: (name.split()[0], name.split()[-1]))
 
     def get_all_author_network(self):
-        network = set()
+        network = {}
         for pub in self.publications:
             for author in pub.authors:
-                network.add(author)
+                if author not in network.keys():
+                    network[author] = set()
+                for coauthor in pub.authors:
+                    if author != coauthor:
+                        network[author].add(coauthor)
         return network
 
 class DocumentHandler(handler.ContentHandler):
