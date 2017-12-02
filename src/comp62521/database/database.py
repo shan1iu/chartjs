@@ -1,6 +1,7 @@
 from comp62521.statistics import average
 import itertools
 import numpy as np
+import networkx as nx
 from xml.sax import handler, make_parser, SAXException
 
 PublicationType = [
@@ -518,7 +519,9 @@ class Database:
         return network
 
     def get_all_author_network_graph(self):
-        return 0
+        network = self.get_all_author_network()
+        graph = nx.Graph(network)
+        return graph
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
