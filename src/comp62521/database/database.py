@@ -526,7 +526,9 @@ class Database:
         return graph
 
     def get_author_id(self, name):
-        return 0
+        for a in self.author_idx.keys():
+            if a.lower() == name.lower():
+                return self.author_idx[a]
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
