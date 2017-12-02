@@ -309,9 +309,9 @@ class TestDatabase(unittest.TestCase):
 
     def test_get_all_author_network(self):
         db = database.Database()
-        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         network = db.get_all_author_network()
-        self.assertEqual(network, 0)
+        self.assertEqual(network, {})
 
     def test_get_network_data(self):
         db = database.Database()
