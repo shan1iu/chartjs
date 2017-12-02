@@ -307,6 +307,12 @@ class TestDatabase(unittest.TestCase):
                           'Brian Sam Alice', 'Brian Esam', 'Brian Sam', 'Brian Sammer', 'Brian Samming', 'Sam Alice',
                           'Sam Brian', 'Samuel Alice', 'Samuel Brian'])
 
+    def test_get_all_author_network(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        network = db.get_all_author_network()
+        self.assertEqual(network, 0)
+
     def test_get_network_data(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
