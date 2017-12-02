@@ -507,8 +507,8 @@ class Database:
             return sorted(authors, key=lambda name: (name.split()[0], name.split()[-1]))
 
     def get_all_author_network(self):
-        return 0
-
+        network = {}
+        return {}
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
