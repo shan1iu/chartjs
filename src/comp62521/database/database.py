@@ -530,6 +530,9 @@ class Database:
             if a.lower() == name.lower():
                 return self.author_idx[a]
 
+    def get_degree_of_separation(self, network, author1, author2):
+        return 0
+
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
     PUB_TYPE = {
