@@ -543,7 +543,17 @@ class Database:
         return degree
 
     def get_all_shortest_paths(self, graph, source, target):
-        return None
+        author1 = self.get_author_id(source)
+        author2 = self.get_author_id(target)
+        paths = []
+        try:
+            for path in nx.all_shortest_paths(graph, author1, author2):
+                if path not in paths:
+                    names = [self.authors[p].name for p in path]
+                    paths.append(names)
+        except:
+            pass
+        return paths
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
