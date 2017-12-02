@@ -331,6 +331,13 @@ class TestDatabase(unittest.TestCase):
         author1_id = db.get_author_id('author2')
         self.assertEqual(author1_id, 1)
 
+    def test_get_degree_of_separation(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "three-authors-and-three-publications.xml")))
+        graph = db.get_all_author_network_graph()
+        degree = db.get_degree_of_separation(graph, 'author1', 'author2')
+        self.assertEqual(degree, 0)
+
     def test_get_network_data(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
