@@ -317,7 +317,10 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         graph = db.get_all_author_network_graph()
-        self.assertEqual(graph, 0)
+        nodes = graph.nodes()
+        edges = graph.edges()
+        self.assertEqual(nodes, [0, 1])
+        self.assertEqual(edges, [(0, 1)])
 
     def test_get_network_data(self):
         db = database.Database()
