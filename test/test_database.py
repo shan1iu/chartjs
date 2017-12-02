@@ -325,6 +325,12 @@ class TestDatabase(unittest.TestCase):
         attributes = nx.get_node_attributes(graph, 'name')
         self.assertEqual(attributes, {0: u'AUTHOR1', 1: u'AUTHOR2'})
 
+    def test_get_author_id(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        author1_id = db.get_author_id('author1')
+        self.assertEqual(author1_id, 0)
+
     def test_get_network_data(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
