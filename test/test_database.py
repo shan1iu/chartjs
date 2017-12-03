@@ -358,7 +358,7 @@ class TestDatabase(unittest.TestCase):
     def test_get_author_network(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
-        self.assertEqual(db.get_author_network('author1'), 0)
+        self.assertEqual(db.get_author_network('author1'), {0: {1}, 1: {0}})
 
 
 if __name__ == '__main__':
