@@ -155,18 +155,23 @@
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 var json_data = JSON.stringify(xmlhttp.response);
                 var data_list = JSON.parse(json_data);
-                showTable(author1.value, author2.value, data_list["degree"]);
-                var element = document.getElementById("plot_content");
-                var node_list = [];
-                var edge_list = [];
-                node_list = parseData(data_list["data"])[0];
-                edge_list = parseData(data_list["data"])[1];
-                var str_id = "str_0";
-                var div = document.createElement("div");
-                div.id = str_id;
-                div.className = "path container";
-                element.appendChild(div);
-                cytoscape(template(str_id, node_list, edge_list));
+                console.log(data_list["data"]);
+                if (data_list["data"].length === 0) {
+                    alert("Author Name Not Found");
+                } else {
+                    showTable(author1.value, author2.value, data_list["degree"]);
+                    var element = document.getElementById("plot_content");
+                    var node_list = [];
+                    var edge_list = [];
+                    node_list = parseData(data_list["data"])[0];
+                    edge_list = parseData(data_list["data"])[1];
+                    var str_id = "str_0";
+                    var div = document.createElement("div");
+                    div.id = str_id;
+                    div.className = "path container";
+                    element.appendChild(div);
+                    cytoscape(template(str_id, node_list, edge_list));
+                }
             }
         };
         xmlhttp.open("GET", "/sprint4_get_plot/" + author1.value + "/" + author2.value, true);
