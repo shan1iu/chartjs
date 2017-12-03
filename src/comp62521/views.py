@@ -209,4 +209,4 @@ def show_network():
 @app.route("/data/<name>")
 def data(name):
     db = app.config['DATABASE']
-    return jsonify(db.get_single_author_network_json(name))
+    return jsonify(db.get_author_network(name))
