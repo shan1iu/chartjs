@@ -518,6 +518,9 @@ class Database:
                         network[author].add(coauthor)
         return network
 
+    def get_author_network(self, name):
+        return 0
+
     def get_all_author_network_graph(self):
         network = self.get_all_author_network()
         names = {id: self.authors[id].name for id in network.keys()}
