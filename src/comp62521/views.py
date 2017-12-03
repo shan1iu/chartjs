@@ -198,10 +198,11 @@ def showSprintGetPlot(author1, author2):
 def show_network():
     dataset = app.config['DATASET']
     args = {"dataset": dataset, "id": "author_network"}
-    args['title'] = 'Network'
+    args['title'] = 'Research Network'
     name = ''
     if "name" in request.args:
         name = request.args.get("name")
+        args['title'] = 'Research Network for {}'.format(name)
     args['name'] = name
     return render_template('author_network.html', args=args)
 
