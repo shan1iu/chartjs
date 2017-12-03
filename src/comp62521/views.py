@@ -193,3 +193,19 @@ def showSprintGetPlot(author1, author2):
     degree = db.get_degree_of_separation(graph, author1, author2)
     # print "data : ", type(jsonify({'devices': data}))
     return jsonify({'data': path, 'degree': degree})
+
+@app.route("/author_network")
+def show_network():
+    dataset = app.config['DATASET']
+    args = {"dataset": dataset, "id": "author_network"}
+    args['title'] = 'Network'
+    name = ''
+    if "name" in request.args:
+        name = request.args.get("name")
+    args['name'] = name
+    return render_template('author_network.html', args=args)
+
+@app.route("/data/<name>")
+def data(name):
+    db = app.config['DATABASE']
+    return jsonify(db.get_single_author_network_json(name))
