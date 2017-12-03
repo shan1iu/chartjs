@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block content %}
+
+<form>
+  <input type="text" id="search_box_1" name="a" onkeyup="showHint(this.value, 'search_box_1')" onblur="keywordBlur()"
+         onfocus="showHint(this.value, 'search_box_1')">
+  <input type="text" id="search_box_2" name="b" onkeyup="showHint(this.value, 'search_box_2')" onblur="keywordBlur()"
+         onfocus="showHint(this.value, 'search_box_2')">
+  <div id="pop_suggest">
+    <table id="pop_content_table" bgcolor="#fff" border="0" cellspacing="0" cellpadding="0">
+      <tbody id="pop_content_body"></tbody>
+    </table>
+  </div>
+  <input type="button" value="SEARCH" id="search_button" onclick="showResult()">
+</form>
+
+<div class="container">
+  <h1>Table here</h1>
+  <table id="table_content" style="display: none;" bgcolor="#fff" border="1" cellspacing="0" cellpadding="5">
+    <thead>
+    <tr>
+      <td>Author1</td>
+      <td>Author2</td>
+      <td>Degrees of separation</td>
+    </tr>
+    </thead>
+    <tbody id="table_content_body"></tbody>
+  </table>
+</div>
+<div class="container">
+  <h1>Plot here</h1>
+  <div id="plot_content"></div>
+</div>
+<script>
+    function clearContent() {
+        var pop_content_body = document.getElementById("pop_content_body");
+        var child_length = pop_content_body.childNodes.length;
+        for (var i = child_length - 1; i >= 0; i--) {
+            pop_content_body.removeChild(pop_content_body.childNodes[i]);
+        }
+        document.getElementById("pop_content_table").style.border = "none";
+    }
+    function clearTable() {
+        var table_content_body = document.getElementById("table_content_body");
+        var child_length = table_content_body.childNodes.length;
+        for (var i = child_length - 1; i >= 0; i--) {
+            table_content_body.removeChild(table_content_body.childNodes[i]);
+        }
+    }
+    function keywordBlur() {
+        setTimeout(clearContent, 10);
+    }
+    function setLocation(search_box_id) {
+        var content = document.getElementById(search_box_id);
+        var pop_content_body = document.getElementById("pop_content_body");
+        var pop_content_table = document.getElementById("pop_content_table");
+        var width = content.offsetWidth;
+        var left = content["offsetLeft"];
+        var top = content["offsetTop"] + content.offsetHeight;
+        pop_content_body.style.border = "1px solid #000";
+        pop_content_body.style.width = width + "px";
+        pop_content_body.style.left = left + "px";
+        pop_content_body.style.top = top + "px";
+        pop_content_table.style.width = width + "px";
+    }
+    function advancedSearch(data, search_box_id) {
+        clearContent();
+        setLocation(search_box_id);
+        var length = data.length;
+        for (var i = 0; i < length; i++) {
+            var author = data[i];
+            var tr = document.createElement("tr");
+            var td = document.createElement("td");
+            td.setAttribute("border", "0");
+            td.setAttribute("bgcolor", "#fff");
+            td.setAttribute("z-index", 999);
+            td.onmouseover = function () {
+                this.className = "mouseOver";
+            };
+            td.onmouseout = function () {
+                this.className = "";
+            };
+            td.onclick = function () {
+                document.getElementById(search_box_id).value = this.innerHTML;
+                document.getElementById(search_box_id).focus();
+                clearContent();
+            };
+            var text = document.createTextNode(author);
+            td.appendChild(text);
+            tr.appendChild(td);
+            document.getElementById("pop_content_body").appendChild(tr);
+        }
+    }
+    function showHint(str, search_box_id) {
+        var xmlhttp;
+        if (str === "") {
+            clearContent();
+        } else {
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.responseType = "json";
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    var json_data = JSON.stringify(xmlhttp.response);
+                    var data_list = JSON.parse(json_data);
+                    //document.getElementById(des_id).innerHTML = xmlhttp.response;
+                    advancedSearch(data_list["data"], search_box_id);
+                }
+            };
+            xmlhttp.open("GET", "/sprint_get_name/" + str, true);
+            xmlhttp.send();
+        }
+    }
+    function showTable(author1, author2, degree) {
+        clearTable();
+        var table_content = document.getElementById("table_content");
+        var table_content_body = document.getElementById("table_content_body");
+        table_content.getElementsByTagName("tbody");
+        table_content.style.display = "block";
+        var tbody = document.createElement("tbody");
+        var tr = document.createElement("tr");
+        var td0 = document.createElement("td");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var author_val_a = document.createTextNode(author1);
+        var author_val_b = document.createTextNode(author2);
+        var degree_val = document.createTextNode(degree);
+        td0.appendChild(author_val_a);
+        td1.appendChild(author_val_b);
+        td2.appendChild(degree_val);
+        tr.appendChild(td0);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        table_content_body.appendChild(tr);
+    }
+    function showResult() {
+        var author1 = document.getElementById("search_box_1");
+        var author2 = document.getElementById("search_box_2");
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.responseType = "json";
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                var json_data = JSON.stringify(xmlhttp.response);
+                var data_list = JSON.parse(json_data);
+                console.log(data_list["data"]);
+                if (data_list["data"].length === 0) {
+                    alert("Author Name Not Found");
+                } else {
+                    showTable(author1.value, author2.value, data_list["degree"]);
+                    var element = document.getElementById("plot_content");
+                    var node_list = [];
+                    var edge_list = [];
+                    node_list = parseData(data_list["data"])[0];
+                    edge_list = parseData(data_list["data"])[1];
+                    var str_id = "str_0";
+                    var div = document.createElement("div");
+                    div.id = str_id;
+                    div.className = "path container";
+                    element.appendChild(div);
+                    cytoscape(template(str_id, node_list, edge_list));
+                }
+            }
+        };
+        xmlhttp.open("GET", "/sprint4_get_plot/" + author1.value + "/" + author2.value, true);
+        xmlhttp.send();
+    }
+</script>
+{% endblock %}

@@ -1,6 +1,6 @@
 from comp62521 import app
 from database import database
-from flask import (render_template, request)
+from flask import (render_template, request, jsonify, json, Response)
 
 
 def format_data(data):
@@ -105,11 +105,12 @@ def show_author_stats():
             "data": db.get_author_stats()}
     return render_template('author_stats.html', args=args)
 
+
 @app.route("/search")
 def search_for_author():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
-    args = {"dataset":dataset, "id":"search"}
+    args = {"dataset": dataset, "id": "search"}
     name = ""
     args['title'] = "Search for Author"
     if "name" in request.args:
@@ -117,14 +118,16 @@ def search_for_author():
     args["data"] = db.get_matching_authors(name)
     return render_template('author_search.html', args=args)
 
+
 @app.route("/authorstatistics/<name>")
 def show_author_statistics(name):
-   dataset = app.config['DATASET']
-   db = app.config['DATABASE']
-   args = {"dataset":dataset, "name":name}
-   args["title"] = "Comprehensive Statistics for " + name
-   args["data"] = db.get_all_author_stats(name)
-   return render_template('author_statistics.html', args=args)
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset, "name": name}
+    args["title"] = "Comprehensive Statistics for " + name
+    args["data"] = db.get_all_author_stats(name)
+    return render_template('author_statistics.html', args=args)
+
 
 @app.route("/statisticsdetails/<status>")
 def showPublicationSummary(status):
@@ -153,3 +156,40 @@ def showPublicationSummary(status):
         args["data"] = db.get_first_last_sole()
 
     return render_template('statistics_details.html', args=args)
+
+
+@app.route("/sprint4_get_static_page")
+def showSprin4GetStaticPage():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset}
+    args["title"] = "Sprint4 Story4"
+    return render_template("sprint4story4.html", args=args)
+
+
+@app.route("/sprint_get_name/<name>")
+def showSprintGetName(name):
+    name = name.lower()
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    all_authors = db.get_all_authors()
+    return_author = list()
+    for author in all_authors:
+        lower_author = author.lower() + ""
+        if lower_author.startswith(name) or lower_author.startswith(name.upper()):
+            return_author.append(author)
+    # print return_author
+    return jsonify({'data': return_author})
+
+
+@app.route("/sprint4_get_plot/<author1>/<author2>")
+def showSprintGetPlot(author1, author2):
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset}
+    args["title"] = "Sprint4 Story4"
+    graph = db.get_all_author_network_graph()
+    path = db.get_all_shortest_paths(graph, author1, author2)
+    degree = db.get_degree_of_separation(graph, author1, author2)
+    # print "data : ", type(jsonify({'devices': data}))
+    return jsonify({'data': path, 'degree': degree})
