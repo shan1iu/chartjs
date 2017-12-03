@@ -2,6 +2,7 @@ from comp62521.statistics import average
 import itertools
 import numpy as np
 import networkx as nx
+from networkx.readwrite import json_graph
 from xml.sax import handler, make_parser, SAXException
 
 PublicationType = [
@@ -528,7 +529,16 @@ class Database:
                         if a != a2 and self.authors[a2].name not in authors:
                             authors.append(self.authors[a2].name)
         network = {i: {0} if i != 0 else {i for i in range(1, len(authors))} for i in range(0, len(authors))}
-        return network
+        names = {authors.index(i): i for i in authors}
+        total_coauthors = sum([self.get_coauthor_stat(self.publications, a) for a in authors])
+        coauthors = {authors.index(i): self.get_coauthor_stat(self.publications, i) * 10.0 / total_coauthors for i in
+                     authors}
+        colours = {id: 0 if id == 0 else 1 for id in network.keys()}
+        graph = nx.Graph(network)
+        nx.set_node_attributes(graph, 'name', names)
+        nx.set_node_attributes(graph, 'coauthors', coauthors)
+        nx.set_node_attributes(graph, 'colour', colours)
+        return json_graph.node_link_data(graph)
 
     def get_all_author_network_graph(self):
         network = self.get_all_author_network()
