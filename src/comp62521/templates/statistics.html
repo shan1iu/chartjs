@@ -2,19 +2,34 @@
 {% block title %}Home{% endblock %}
 
 {% block head %}
-  {{ super() }}
+{{ super() }}
 {% endblock %}
 
 {% block content %}
 <ul class="statistics" style="list-style-type:none">
-  <li><a href="/statisticsdetails/publication_summary"><button type="button" class="stat"><span>Publication Summary</span></button></a></li>
-  <li><a href="/statisticsdetails/publication_author"><button type="button" class="stat"><span>Publication by Author</span></button></a></li>
-  <li><a href="/statisticsdetails/publication_year"><button type="button" class="stat"><span>Publication by Year</span></button></a></li>
-  <li><a href="/statisticsdetails/author_year"><button type="button" class="stat"><span>Author by Year</span></button></a></li>
-  <li><a href="/averages"><button type="button" class="stat"><span>Averaged Year Data</span></button></a></li>
-  <li><a href="/coauthors"><button type="button" class="stat"><span>Co-Authors</span></button></a></li>
-    <li><a href="/search"><button type="button" class="stat"><span>Search</span></button></a></li>
-  <li><a href="/author_stats"><button type="button" class="stat"><span>Author Stats</span></button></a></li>
-  <li><a href="/statisticsdetails/author_first_last_sole"><button type="button" class="stat"><span>First, Last and Sole stats of an Author</span></button></a></li>
+  <li><a href="/statisticsdetails/publication_summary">
+    <button type="button" class="stat"><span>Publication Summary</span></button>
+  </a></li>
+  <li><a href="/statisticsdetails/publication_author">
+    <button type="button" class="stat"><span>Publication by Author</span></button>
+  </a></li>
+  <li><a href="/statisticsdetails/publication_year">
+    <button type="button" class="stat"><span>Publication by Year</span></button>
+  </a></li>
+  <li><a href="/statisticsdetails/author_year">
+    <button type="button" class="stat"><span>Author by Year</span></button>
+  </a></li>
+  <li><a href="/averages">
+    <button type="button" class="stat"><span>Averaged Year Data</span></button>
+  </a></li>
+  <li><a href="/coauthors">
+    <button type="button" class="stat"><span>Co-Authors</span></button>
+  </a></li>
+  <li><a href="/search">
+    <button type="button" class="stat"><span>Search</span></button>
+  </a></li>
+  <li><a href="/sprint4_get_static_page">
+    <button type="button" class="stat"><span>Sprint4Story4</span></button>
+  </a></li>
 </ul>
 {% endblock %}
