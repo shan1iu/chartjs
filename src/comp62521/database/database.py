@@ -519,7 +519,16 @@ class Database:
         return network
 
     def get_author_network(self, name):
-        return 0
+        id = self.get_author_id(name)
+        authors = [name]
+        for pub in self.publications:
+            for a in pub.authors:
+                if a == id:
+                    for a2 in pub.authors:
+                        if a != a2 and self.authors[a2].name not in authors:
+                            authors.append(self.authors[a2].name)
+        network = {i: {0} if i != 0 else {i for i in range(1, len(authors))} for i in range(0, len(authors))}
+        return network
 
     def get_all_author_network_graph(self):
         network = self.get_all_author_network()
