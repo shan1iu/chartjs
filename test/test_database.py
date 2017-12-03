@@ -307,10 +307,54 @@ class TestDatabase(unittest.TestCase):
                           'Brian Sam Alice', 'Brian Esam', 'Brian Sam', 'Brian Sammer', 'Brian Samming', 'Sam Alice',
                           'Sam Brian', 'Samuel Alice', 'Samuel Brian'])
 
+    def test_get_all_author_network(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        network = db.get_all_author_network()
+        self.assertEqual(network, {0 : {1}, 1: {0}})
+
+    def test_get_all_author_network_graph(self):
+        import networkx as nx
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        graph = db.get_all_author_network_graph()
+        nodes = graph.nodes()
+        self.assertEqual(nodes, [0, 1])
+        edges = graph.edges()
+        self.assertEqual(edges, [(0, 1)])
+        attributes = nx.get_node_attributes(graph, 'name')
+        self.assertEqual(attributes, {0: u'AUTHOR1', 1: u'AUTHOR2'})
+
+    def test_get_author_id(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        author1_id = db.get_author_id('author2')
+        self.assertEqual(author1_id, 1)
+
+    def test_get_degree_of_separation(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "three-authors-and-three-publications.xml")))
+        graph = db.get_all_author_network_graph()
+        degree = db.get_degree_of_separation(graph, 'author1', 'author3')
+        self.assertEqual(degree, None)
+        degree = db.get_degree_of_separation(graph, 'author1', 'author4')
+        self.assertEqual(degree, None)
+
+    def test_get_all_shortest_paths(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "publications_small_sample.xml")))
+        graph = db.get_all_author_network_graph()
+        paths = db.get_all_shortest_paths(graph, 'Sean Bechhofer', 'Simon Harper')
+        self.assertEqual(paths, [[u'Sean Bechhofer', u'Yeliz Yesilada', u'Simon Harper'],
+                                 [u'Sean Bechhofer', u'Carole A. Goble', u'Simon Harper']])
+        paths = db.get_all_shortest_paths(graph, 'Stefano Cero', 'Deji')
+        self.assertEqual(paths, [])
+
     def test_get_network_data(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         self.assertEqual(db.get_network_data(), ([[u'AUTHOR1', 1], [u'AUTHOR2', 1]], {(0, 1)}))
+
 
 
 if __name__ == '__main__':

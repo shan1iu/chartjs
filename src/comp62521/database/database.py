@@ -1,6 +1,7 @@
 from comp62521.statistics import average
 import itertools
 import numpy as np
+import networkx as nx
 from xml.sax import handler, make_parser, SAXException
 
 PublicationType = [
@@ -506,6 +507,53 @@ class Database:
         else:
             return sorted(authors, key=lambda name: (name.split()[0], name.split()[-1]))
 
+    def get_all_author_network(self):
+        network = {}
+        for pub in self.publications:
+            for author in pub.authors:
+                if author not in network.keys():
+                    network[author] = set()
+                for coauthor in pub.authors:
+                    if author != coauthor:
+                        network[author].add(coauthor)
+        return network
+
+    def get_all_author_network_graph(self):
+        network = self.get_all_author_network()
+        names = {id: self.authors[id].name for id in network.keys()}
+        graph = nx.Graph(network)
+        nx.set_node_attributes(graph, 'name', names)
+        return graph
+
+    def get_author_id(self, name):
+        for a in self.author_idx.keys():
+            if a.lower() == name.lower():
+                return self.author_idx[a]
+
+    def get_degree_of_separation(self, network, author1, author2):
+        author1 = self.get_author_id(author1)
+        author2 = self.get_author_id(author2)
+        if author1 is None or author2 is None:
+            degree = None
+        else:
+            try:
+                degree = len(nx.shortest_path(network, author1, author2)) - 2
+            except:
+                degree = None
+        return degree
+
+    def get_all_shortest_paths(self, graph, source, target):
+        author1 = self.get_author_id(source)
+        author2 = self.get_author_id(target)
+        paths = []
+        try:
+            for path in nx.all_shortest_paths(graph, author1, author2):
+                if path not in paths:
+                    names = [self.authors[p].name for p in path]
+                    paths.append(names)
+        except:
+            pass
+        return paths
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
