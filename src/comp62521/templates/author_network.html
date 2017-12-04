@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block content %}
+
+<h1>{{ args.title }}</h1>
+<form name="input" action="/author_network" method="get" data-ajax="false">
+Author: <input type="search" name="name" id="name">
+<input type="submit" value="Search">
+</form>
+
+<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<style>
+
+.link {
+  stroke: #aaa;
+}
+
+.node text {
+stroke:#000;
+cursos:pointer;
+}
+
+.node circle{
+stroke:#000;
+stroke-width:1px;
+}
+
+</style>
+<body>
+<script>
+
+var width = 1200,
+    height = 600
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var force = d3.layout.force()
+    .gravity(.05)
+    .distance(100)
+    .charge(-100)
+    .size([width, height]);
+
+d3.json("/data/{{ args.name }}", function(json) {
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(json.links)
+    .enter().append("line")
+      .attr("class", "link");
+
+  var node = svg.selectAll(".node")
+      .data(json.nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .call(force.drag);
+
+  node.append("circle")
+      .attr("r", function(d) { return Math.sqrt(d.coauthors) * 22.5; })
+      .attr("id", function(d) { return d.id; })
+      .attr("fill", function(d){
+        return d.colour == 0 ? '#1840FF': '#FFCC31'
+      });
+
+  node.filter(function(d) {return d.id == 0}).append("text")
+      .attr("dx", function(d){return Math.sqrt(d.coauthors) * 22.5})
+      .attr("dy", function(d){return Math.sqrt(d.coauthors) * 22.5})
+      .text(function(d) { return d.name });
+
+    node.append("title")
+        .text(function(d) { return d.name; });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+});
+
+</script>
+
+{% endblock %}
