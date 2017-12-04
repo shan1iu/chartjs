@@ -358,7 +358,6 @@ class TestDatabase(unittest.TestCase):
     def test_get_author_network(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
-        print db.get_author_network('author1')
         self.assertEqual(db.get_author_network('author1'),
                          {'directed': False, 'graph': {}, 'nodes': [{'id': 0, 'colour': 0, 'name': 'author1',
                                                                      'coauthors': 5.0}, {'id': 1, 'colour': 1, 'name':
