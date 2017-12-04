@@ -1,33 +1,145 @@
 <!doctype html>
 <html>
-
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <script src="{{ url_for('static', filename='js/cytoscape.js') }}"></script>
-  <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
-  <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js"></script>
-  <script src="{{ url_for('static', filename='js/sort.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/print.js') }}"></script>
-  <!--<link type="text/css" href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">-->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link type="text/css" href="{{ url_for('static', filename='css/plot_arrow.css') }}" rel="stylesheet">
-  <meta http-equiv="Content-Type" content="application/json; charset=utf-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.min.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/themes/tooltipster-shadow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1 0 auto;
+    }
+
+    .googleFont {
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    thead th:hover,
+    li {
+      cursor: pointer;
+    }
+  </style>
 </head>
-
 <body>
-<div id="page">
 
-  <div id="header">
-    <h1>COMP62521: {{ args.dataset }}</h1>
-    <div id="navigation">
-      <a href="/">
-        <button type="button" id="homebutton"><span>Home</span></button>
-      </a>
-    </div>
+
+<nav id="#top">
+  <ul id="dropdown1" class="dropdown-content">
+    <li class="{{args.class_2}}">
+      <a class="tooltip" href="/statisticsdetails/publication_summary" title="Show Publication Summary">Summary</a>
+    </li>
+    <li class="{{args.class_3}}">
+      <a class="tooltip" href="/statisticsdetails/publication_author" title="Show Publication By Author">By Author</a>
+    </li>
+    <li class="{{args.class_4}}">
+      <a class="tooltip" href="/statisticsdetails/publication_year" title="Show Publication By Year">By Year</a>
+    </li>
+  </ul>
+  <div class="nav-wrapper">
+    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+    <ul class="left hide-on-med-and-down">
+      <li class="{{args.class_1}}">
+        <a class="tooltip" href="/" title="Go Back To Homepage">
+          <i class="large material-icons">home</i>
+        </a>
+      </li>
+      <li class="{{args.class_2}} {{args.class_3}} {{args.class_4}}">
+        <a class="dropdown-button" href="#" data-activates="dropdown1">Publication<i class="material-icons right">arrow_drop_down</i></a>
+      </li>
+      <li class="{{args.class_5}}">
+        <a class="tooltip" href="/statisticsdetails/author_year" title="Message here">Author by Year</a>
+      </li>
+      <li class="{{args.class_6}}">
+        <a class="tooltip" href="/averages" title="Message here">Averaged Year Data</a>
+      </li>
+      <li class="{{args.class_7}}">
+        <a class="tooltip" href="/coauthors" title="Get All Information About Co-Authors">Co-Authors</a>
+      </li>
+      <li class="{{args.class_8}}">
+        <a class="tooltip" href="/search" title="Fuzzy Search For Authors">Search</a>
+      </li>
+      <li class="{{args.class_9}}">
+        <a class="tooltip" href="/sprint4_get_static_page" title="Find Relationships between two authors">Relation</a>
+      </li>
+    </ul>
+    <ul class="side-nav" id="mobile-demo">
+      <li class="{{args.class_1}}">
+        <a href="/">Home</a>
+      </li>
+      <li class="{{args.class_2}}">
+        <a href="/statisticsdetails/publication_summary">Publication Summary</a>
+      </li>
+      <li class="{{args.class_3}}">
+        <a href="/statisticsdetails/publication_author">Publication by Author</a>
+      </li>
+      <li class="{{args.class_4}}">
+        <a href="/statisticsdetails/publication_year">Publication by Year</a>
+      </li>
+      <li class="{{args.class_5}}">
+        <a href="/statisticsdetails/author_year">Author by Year</a>
+      </li>
+      <li class="{{args.class_6}}">
+        <a href="/averages">Averaged Year Data</a>
+      </li>
+      <li class="{{args.class_7}}">
+        <a href="/coauthors">Co-Authors</a>
+      </li>
+      <li class="{{args.class_8}}">
+        <a href="/search">Search</a>
+      </li>
+      <li class="{{args.class_9}}">
+        <a href="/sprint4_get_static_page">Sprint4Story4</a>
+      </li>
+    </ul>
   </div>
-
-  <div id="content">
+</nav>
+<main>
+  <div class="container">
     {% block content %}{% endblock %}
   </div>
-</div>
+</main>
+<footer class="page-footer" style="padding-top: 16px">
+  <div class="container">
+    <div class="center row">
+      <div>
+        <span>
+          <i class="material-icons" style="position: relative;top: 4px;right: 2px;">insert_drive_file</i>
+          {{args.dataset}}
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="{{ url_for('static', filename='js/cytoscape.js') }}"></script>
+<script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
+<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.min.js"></script>
+<script src="{{ url_for('static', filename='js/sort.js') }}"></script>
+<script src="{{ url_for('static', filename='js/print.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $('select').material_select();
+        $(".button-collapse").sideNav();
+        $(".dropdown-button").dropdown();
+        $('.tooltip').tooltipster({
+            theme: 'tooltipster-shadow',
+            animation: 'swing'
+        });
+    });
+</script>
 </body>
 </html>

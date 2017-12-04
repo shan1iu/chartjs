@@ -56,6 +56,7 @@ def showAverages():
             for i in averages]})
 
     args['tables'] = tables
+    args['class_6'] = "active"
     return render_template("averages.html", args=args)
 
 
@@ -65,6 +66,7 @@ def showCoAuthors():
     db = app.config['DATABASE']
     PUB_TYPES = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
     args = {"dataset": dataset, "id": "coauthors", "title": "Co-Authors"}
+    args["class_7"] = "active"
 
     start_year = db.min_year
     if "start_year" in request.args:
@@ -93,7 +95,8 @@ def showCoAuthors():
 @app.route("/")
 def showStatisticsMenu():
     dataset = app.config['DATASET']
-    args = {"dataset": dataset}
+    args = {"dataset": dataset, }
+    args["class_1"] = "active"
     return render_template('statistics.html', args=args)
 
 
@@ -116,6 +119,7 @@ def search_for_author():
     if "name" in request.args:
         name = request.args.get("name")
     args["data"] = db.get_matching_authors(name)
+    args["class_8"] = "active"
     return render_template('author_search.html', args=args)
 
 
@@ -126,6 +130,7 @@ def show_author_statistics(name):
     args = {"dataset": dataset, "name": name}
     args["title"] = "Comprehensive Statistics for " + name
     args["data"] = db.get_all_author_stats(name)
+
     return render_template('author_statistics.html', args=args)
 
 
@@ -138,18 +143,22 @@ def showPublicationSummary(status):
     if status == "publication_summary":
         args["title"] = "Publication Summary"
         args["data"] = db.get_publication_summary()
+        args["class_2"] = "active"
 
     if status == "publication_author":
         args["title"] = "Author Publication"
         args["data"] = db.get_publications_by_author()
+        args["class_3"] = "active"
 
     if status == "publication_year":
         args["title"] = "Publication by Year"
         args["data"] = db.get_publications_by_year()
+        args["class_4"] = "active"
 
     if status == "author_year":
         args["title"] = "Author by Year"
         args["data"] = db.get_author_totals_by_year()
+        args["class_5"] = "active"
 
     if status == "author_first_last_sole":
         args["title"] = "First, Last and Sole "
@@ -164,6 +173,8 @@ def showSprin4GetStaticPage():
     db = app.config['DATABASE']
     args = {"dataset": dataset}
     args["title"] = "Sprint4 Story4"
+    args["class_9"] = "active"
+
     return render_template("sprint4story4.html", args=args)
 
 

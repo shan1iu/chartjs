@@ -84,7 +84,7 @@ function template(id, arg_node, arg_edge) {
         container: document.getElementById(id),
         boxSelectionEnabled: false,
         autounselectify: true,
-        userZoomingEnabled: false,
+        userZoomingEnabled: true,
         layout: {
             name: 'dagre'
         },

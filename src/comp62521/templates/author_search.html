@@ -1,20 +1,28 @@
 {% extends "base.html" %}
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
+<div class="row" style="margin-top: 2rem;">
+  <form name="input" action="/search" method="get" data-ajax="false">
+    <div class="input-field col s12 m8">
+      <input type="search" name="name" id="search_author">
+      <label for="search_author">Author Name</label>
+    </div>
+    <div class="col s12 m4">
+      <button class="waves-effect waves-light btn-large center-align" type="submit" name="action" onclick="showResult()"
+              style="margin-top: 6px;width: 100%;">SEARCH
+        <i class=" material-icons right">send</i>
+      </button>
+    </div>
+  </form>
+</div>
 
-<h1>{{ args.title }}</h1>
-<form name="input" action="/search" method="get" data-ajax="false">
-Author: <input type="search" name="name">
-<input type="submit" value="Search">
-</form>
-
-<table>
+<div class="row">
+  <table class="striped centered">
     {%if args.data | length != 1 and args.data | length > 0 %}
     {% for data in args.data %}
     <tr>
       <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data }}',
         'MyWindow',width=600,height=200); return false;">Stats for {{ data }}</a></td>
-
     </tr>
     {% endfor %}
     {% elif args.data | length == 1 %}
@@ -24,23 +32,33 @@ Author: <input type="search" name="name">
     {%endfor%}
     <thead>
     <tr>
-    {% for column in header %}
+      {% for column in header %}
       <th><input type="submit" value="{{ column }}"></th>
-    {% endfor %}
+      {% endfor %}
     </tr>
-  </thead>
+    </thead>
     <tbody>
     {% set data = args.data[0][0:args.data[0]|length - 1] %}
     {%for row in data %}
     <tr>
-        {% for data_item in row %}
-        <td>{{ data_item }}</td>
-        {% endfor %}
+      {% for data_item in row %}
+      <td>{{ data_item }}</td>
+      {% endfor %}
     </tr>
     </tbody>
     {% endfor %}
     {%else%}
-    <h2>That author does not exist</h2>
+    <!--<h2>That author does not exist</h2>-->
     {% endif %}
-</table>
+  </table>
+</div>
+
+
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large tooltip red" href="#top" title="Go to the top">
+    <i class="large material-icons">navigation</i>
+  </a>
+</div>
+
+
 {% endblock %}

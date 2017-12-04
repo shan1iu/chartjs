@@ -6,11 +6,11 @@
 
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for author.." title="Type in a name">
 
-<table id="myTable">
+<table class="striped centered">
   <thead>
     <tr>
     {% for column in args.data[0] %}
-      <th><input type="submit" value="{{ column }}"></th>
+      <th>{{ column }}</th>
     {% endfor %}
     </tr>
   </thead>
