@@ -42,7 +42,7 @@ var force = d3.layout.force()
     .charge(-100)
     .size([width, height]);
 
-d3.json("/data/{{ args.name }}", function(json) {
+d3.json("/network/{{ args.name }}", function(json) {
   force
       .nodes(json.nodes)
       .links(json.links)
@@ -65,6 +65,22 @@ d3.json("/data/{{ args.name }}", function(json) {
       .attr("fill", function(d){
         return d.colour == 0 ? '#1840FF': '#FFCC31'
       });
+
+  node.on("mouseover", function(d){
+    d3.select(this).select("circle").transition()
+    .duration(750)
+    .attr("r", function(d){return Math.sqrt(d.coauthors) * 37.5})
+    .attr("fill", function(d){
+      return d.colour == 0 ? 'red': 'cyan'
+    })
+  })
+.on("mouseout", function(d){
+  d3.select(this).select("circle").transition()
+  .duration(750)
+  .attr("r", function(d){return Math.sqrt(d.coauthors) * 22.5})
+  .attr("fill", function(d){
+    return d.colour == 0 ? '#1840FF': '#FFCC31'})
+})
 
   node.filter(function(d) {return d.id == 0}).append("text")
       .attr("dx", function(d){return Math.sqrt(d.coauthors) * 22.5})

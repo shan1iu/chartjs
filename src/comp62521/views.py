@@ -172,7 +172,7 @@ def showSprin4GetStaticPage():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     args = {"dataset": dataset}
-    args["title"] = "Sprint4 Story4"
+    args["title"] = "Degrees of Separation"
     args["class_9"] = "active"
 
     return render_template("sprint4story4.html", args=args)
@@ -213,11 +213,11 @@ def show_network():
     name = ''
     if "name" in request.args:
         name = request.args.get("name")
-        args['title'] = 'Research Network for {}'.format(name)
+        args['title'] = '{}\'s research network'.format(name)
     args['name'] = name
     return render_template('author_network.html', args=args)
 
-@app.route("/data/<name>")
+@app.route("/network/<name>")
 def data(name):
     db = app.config['DATABASE']
     return jsonify(db.get_author_network(name))
