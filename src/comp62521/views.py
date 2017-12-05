@@ -19,6 +19,7 @@ def showAverages():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     args = {"dataset": dataset, "id": "averages", 'title': "Averaged Data"}
+    args["plotlink"] = "/plot/averages"
     tables = []
     headers = ["Average", "Conference Paper", "Journal", "Book", "Book Chapter", "All Publications"]
     averages = [database.Stat.MEAN, database.Stat.MEDIAN, database.Stat.MODE]
@@ -67,6 +68,7 @@ def showCoAuthors():
     PUB_TYPES = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
     args = {"dataset": dataset, "id": "coauthors", "title": "Co-Authors"}
     args["class_7"] = "active"
+    args["plotlink"] = "/plot/coauthors"
 
     start_year = db.min_year
     if "start_year" in request.args:
@@ -134,6 +136,10 @@ def show_author_statistics(name):
     return render_template('author_statistics.html', args=args)
 
 
+# @app.route("/plot/publication_summary")
+# @app.route("/plot/publication_by_author")
+# @app.route("/plot/publication_by_year")
+# @app.route("/plot/author_by_year")
 @app.route("/statisticsdetails/<status>")
 def showPublicationSummary(status):
     dataset = app.config['DATASET']
@@ -144,21 +150,25 @@ def showPublicationSummary(status):
         args["title"] = "Publication Summary"
         args["data"] = db.get_publication_summary()
         args["class_2"] = "active"
+        args["plotlink"] = "/plot/publication_summary"
 
     if status == "publication_author":
         args["title"] = "Author Publication"
         args["data"] = db.get_publications_by_author()
         args["class_3"] = "active"
+        args["plotlink"] = "/plot/publication_by_author"
 
     if status == "publication_year":
         args["title"] = "Publication by Year"
         args["data"] = db.get_publications_by_year()
         args["class_4"] = "active"
+        args["plotlink"] = "/plot/publication_by_year"
 
     if status == "author_year":
         args["title"] = "Author by Year"
         args["data"] = db.get_author_totals_by_year()
         args["class_5"] = "active"
+        args["plotlink"] = "/plot/author_by_year"
 
     if status == "author_first_last_sole":
         args["title"] = "First, Last and Sole "
@@ -204,3 +214,149 @@ def showSprintGetPlot(author1, author2):
     degree = db.get_degree_of_separation(graph, author1, author2)
     # print "data : ", type(jsonify({'devices': data}))
     return jsonify({'data': path, 'degree': degree})
+
+
+@app.route("/plot/publication_summary")
+def showPlotPublicationSummary():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset}
+    args["title"] = "Graph - Publication Summary"
+    args["gobacklink"] = "/statisticsdetails/publication_summary"
+    args["class_2"] = "active"
+    args["jsfunction"] = "plotPubSummary";
+    return render_template("plot.html", args=args)
+
+
+@app.route("/plot/publication_summary/data")
+def showPlotPublicationSummaryData():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    data = db.get_publication_summary()
+    print data
+    return jsonify({"data": data})
+
+
+@app.route("/plot/publication_by_author")
+def showPlotPublicationByAuthor():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset}
+    args["title"] = "Graph - Publication By Author"
+    args["gobacklink"] = "/statisticsdetails/publication_author"
+    args["class_3"] = "active"
+    args["jsfunction"] = "plotPubByAuthor"
+    return render_template("plot.html", args=args)
+
+
+@app.route("/plot/publication_by_author/data")
+def showPlotPublicationByAuthorData():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    data = db.get_publications_by_author()
+    return jsonify({"data": data})
+
+
+# @app.route("/plot/publication_by_year")
+@app.route("/plot/publication_by_year")
+def showPlotPublicationByYear():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset}
+    args["title"] = "Graph - Publication By Year"
+    args["gobacklink"] = "/statisticsdetails/publication_year"
+    args["class_4"] = "active"
+    args["jsfunction"] = "plotPubByYear"
+    return render_template("plot.html", args=args)
+
+
+@app.route("/plot/publication_by_year/data")
+def showPlotPublicationByYearData():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    data = db.get_publications_by_year()
+    return jsonify({"data": data})
+
+
+# @app.route("/plot/author_by_year")
+@app.route("/plot/author_by_year")
+def showPlotAuthorByYear():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset}
+    args["title"] = "Graph - Author By Year"
+    args["gobacklink"] = "/statisticsdetails/author_year"
+    args["class_5"] = "active"
+    args["jsfunction"] = "plotAuthorByYear"
+    return render_template("plot.html", args=args)
+
+
+@app.route("/plot/author_by_year/data")
+def showPlotAuthorByYearData():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    data = db.get_author_totals_by_year()
+    return jsonify({"data": data})
+
+
+# @app.route("/plot/averages")
+@app.route("/plot/averages")
+def showPlotAverages():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset}
+    args["title"] = "Graph - Averages"
+    args["gobacklink"] = "/statisticsdetails/averages"
+    args["class_6"] = "active"
+    args["jsfunction"] = "plotAverages"
+    return render_template("plot.html", args=args)
+
+
+@app.route("/plot/averages/data")
+def showPlotAveragesData():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = dict()
+    args["plotlink"] = "/plot/averages"
+    tables = []
+    headers = ["Average", "Conference Paper", "Journal", "Book", "Book Chapter", "All Publications"]
+    averages = [database.Stat.MEAN, database.Stat.MEDIAN, database.Stat.MODE]
+    tables.append({
+        "id": 1,
+        "title": "Average Authors per Publication",
+        "header": headers,
+        "rows": [
+            [database.Stat.STR[i]]
+            + format_data(db.get_average_authors_per_publication(i)[1])
+            for i in averages]})
+    tables.append({
+        "id": 2,
+        "title": "Average Publications per Author",
+        "header": headers,
+        "rows": [
+            [database.Stat.STR[i]]
+            + format_data(db.get_average_publications_per_author(i)[1])
+            for i in averages]})
+    tables.append({
+        "id": 3,
+        "title": "Average Publications in a Year",
+        "header": headers,
+        "rows": [
+            [database.Stat.STR[i]]
+            + format_data(db.get_average_publications_in_a_year(i)[1])
+            for i in averages]})
+    tables.append({
+        "id": 4,
+        "title": "Average Authors in a Year",
+        "header": headers,
+        "rows": [
+            [database.Stat.STR[i]]
+            + format_data(db.get_average_authors_in_a_year(i)[1])
+            for i in averages]})
+
+    args['tables'] = tables
+    args['class_6'] = "active"
+    print args['tables']
+    return jsonify({"data": args['tables']})
+
+# @app.route("/plot/coauthors")
