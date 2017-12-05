@@ -2,7 +2,7 @@
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
 
-<h1>{{ args.title }}</h1>
+<h1>{{ args.header }}</h1>
 <form name="input" action="/author_network" method="get" data-ajax="false">
 Author: <input type="search" name="name" id="name">
 <input type="submit" value="Search">
@@ -82,10 +82,8 @@ d3.json("/network/{{ args.name }}", function(json) {
     return d.colour == 0 ? '#1840FF': '#FFCC31'})
 })
 
-  node.filter(function(d) {return d.id == 0}).append("text")
-      .attr("dx", function(d){return Math.sqrt(d.coauthors) * 22.5})
-      .attr("dy", function(d){return Math.sqrt(d.coauthors) * 22.5})
-      .text(function(d) { return d.name });
+  node.attr("dx", function(d){return Math.sqrt(d.coauthors) * 22.5})
+      .attr("dy", function(d){return Math.sqrt(d.coauthors) * 22.5});
 
     node.append("title")
         .text(function(d) { return d.name; });
