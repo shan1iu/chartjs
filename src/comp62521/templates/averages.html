@@ -1,27 +1,37 @@
 {% extends "base.html" %}
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
-<h1>{{ args.title }}</h1>
 {% for table in args.tables %}
-<h2>{{ table.title }}</h2>
-<table>
+
+<h5>{{ table.title }}</h5>
+<table class="striped centered">
   <thead>
-    <tr>
-      {% for column in table.header %}
-        <th>{{ column }}</th>
-      {% endfor %}
-    </tr>
+  <tr>
+    {% for column in table.header %}
+    <th class="tooltip" title="Click me to sort">{{ column }}</th>
+    {% endfor %}
+  </tr>
   </thead>
   <tbody>
-    {% for row in table.rows %}    
-      <tr>
-        {% for data_item in row %}
-          <td>{{ data_item }}</td>
-        {% endfor %}
-      </tr>
+  {% for row in table.rows %}
+  <tr>
+    {% for data_item in row %}
+    <td>{{ data_item }}</td>
     {% endfor %}
+  </tr>
+  {% endfor %}
   </tbody>
 </table>
-<br/>
 {% endfor %}
+
+<div class="fixed-action-btn" style="bottom: 95px">
+  <a class="btn-floating btn-large tooltip blue" title="Visualize">
+    <i class="large material-icons">insert_chart</i>
+  </a>
+</div>
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large tooltip red" href="#top" title="Go to the top">
+    <i class="large material-icons">navigation</i>
+  </a>
+</div>
 {% endblock %}

@@ -2,34 +2,59 @@
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
 
-<form>
-  <input type="text" id="search_box_1" name="a" onkeyup="showHint(this.value, 'search_box_1')" onblur="keywordBlur()"
-         onfocus="showHint(this.value, 'search_box_1')">
-  <input type="text" id="search_box_2" name="b" onkeyup="showHint(this.value, 'search_box_2')" onblur="keywordBlur()"
-         onfocus="showHint(this.value, 'search_box_2')">
+<!-- search input and search button -->
+<div class="row" style="margin-top: 2rem;">
+  <div class="input-field col m5 s12">
+    <input type="text" id="search_box_1" name="a" onkeyup="showHint(this.value, 'search_box_1')"
+           onblur="keywordBlur()"
+           onfocus="showHint(this.value, 'search_box_1')">
+    <label for="search_box_1">First author</label>
+  </div>
+  <div class="input-field col m5 s12">
+    <input type="text" id="search_box_2" name="b" onkeyup="showHint(this.value, 'search_box_2')"
+           onblur="keywordBlur()"
+           onfocus="showHint(this.value, 'search_box_2')">
+    <label for="search_box_1">Second author</label>
+  </div>
+  <div class="input-field col m2 s12">
+    <button class="waves-effect waves-light btn-large center-align" type="button" name="action" onclick="showResult()"
+            style="margin-top: -9px;width: 100%;">SEARCH
+      <i class=" material-icons right">send</i>
+    </button>
+  </div>
+</div>
+
+<!-- suggestion -->
+<div class="row">
   <div id="pop_suggest">
-    <table id="pop_content_table" bgcolor="#fff" border="0" cellspacing="0" cellpadding="0">
+    <table id="pop_content_table" class="centered" style="position: relative;">
       <tbody id="pop_content_body"></tbody>
     </table>
   </div>
-  <input type="button" value="SEARCH" id="search_button" onclick="showResult()">
-</form>
-
-<div class="container">
-  <h1>Table here</h1>
-  <table id="table_content" style="display: none;" bgcolor="#fff" border="1" cellspacing="0" cellpadding="5">
-    <thead>
-    <tr>
-      <td>Author1</td>
-      <td>Author2</td>
-      <td>Degrees of separation</td>
-    </tr>
-    </thead>
-    <tbody id="table_content_body"></tbody>
-  </table>
 </div>
-<div class="container">
-  <h1>Plot here</h1>
+
+<!-- table -->
+<div class="row">
+  <div class="col s12 m12 l12"><h5>Degrees of Separation between two authors</h5></div>
+  <div class="col s12 m12 l12">
+    <div class="center">
+      <table class="striped centered" id="table_content" style="display: none;">
+        <thead>
+        <tr>
+          <th>Author1</th>
+          <th>Author2</th>
+          <th>Degrees of separation</th>
+        </tr>
+        </thead>
+        <tbody id="table_content_body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- plot -->
+<div class="row">
+  <div class="col l12"><h5> Visualizing degrees of Separation between two authors</h5></div>
   <div id="plot_content"></div>
 </div>
 <script>
@@ -52,15 +77,19 @@
         setTimeout(clearContent, 10);
     }
     function setLocation(search_box_id) {
+        console.log(search_box_id);
         var content = document.getElementById(search_box_id);
         var pop_content_body = document.getElementById("pop_content_body");
         var pop_content_table = document.getElementById("pop_content_table");
         var width = content.offsetWidth;
-        var left = content["offsetLeft"];
+        var left = content.offsetLeft;
         var top = content["offsetTop"] + content.offsetHeight;
-        pop_content_body.style.border = "1px solid #000";
-        pop_content_body.style.width = width + "px";
-        pop_content_body.style.left = left + "px";
+        if (search_box_id === "search_box_1") {
+            pop_content_table.style.left = left + "px";
+            console.log(search_box_id + ":" + pop_content_body.style.left);
+        } else {
+            pop_content_table.style.left = (left + width) + "px";
+        }
         pop_content_body.style.top = top + "px";
         pop_content_table.style.width = width + "px";
     }
@@ -72,9 +101,9 @@
             var author = data[i];
             var tr = document.createElement("tr");
             var td = document.createElement("td");
-            td.setAttribute("border", "0");
-            td.setAttribute("bgcolor", "#fff");
-            td.setAttribute("z-index", 999);
+//            td.setAttribute("border", "0");
+//            td.setAttribute("bgcolor", "#fff");
+//            td.setAttribute("z-index", 999);
             td.onmouseover = function () {
                 this.className = "mouseOver";
             };
@@ -109,7 +138,9 @@
                     var json_data = JSON.stringify(xmlhttp.response);
                     var data_list = JSON.parse(json_data);
                     //document.getElementById(des_id).innerHTML = xmlhttp.response;
-                    advancedSearch(data_list["data"], search_box_id);
+                    if (data_list["data"].length !== 1) {
+                        advancedSearch(data_list["data"], search_box_id);
+                    }
                 }
             };
             xmlhttp.open("GET", "/sprint_get_name/" + str, true);
@@ -139,6 +170,18 @@
         table_content_body.appendChild(tr);
     }
     function showResult() {
+        var widthOfSreen = $(document).width();
+        console.log(widthOfSreen);
+        if (widthOfSreen > 1200) {
+            $("#plot_content").html("").height(widthOfSreen / 2.7);
+        } else if (widthOfSreen > 1000 && widthOfSreen <= 1200) {
+            $("#plot_content").html("").height(widthOfSreen / 2.5);
+        } else if (widthOfSreen > 600 && widthOfSreen <= 1000) {
+            $("#plot_content").html("").height(widthOfSreen / 2.3);
+        } else {
+            $("#plot_content").html("").height(widthOfSreen / 2.1);
+        }
+
         var author1 = document.getElementById("search_box_1");
         var author2 = document.getElementById("search_box_2");
         var xmlhttp;
@@ -155,8 +198,8 @@
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 var json_data = JSON.stringify(xmlhttp.response);
                 var data_list = JSON.parse(json_data);
-                console.log(data_list["data"]);
-                if (data_list["data"].length === 0) {
+                //console.log(data_list["data"].length, author1.value, author2.value);
+                if (data_list["data"].length === 0 || author1.value === "" || author1.value === "") {
                     alert("Author Name Not Found");
                 } else {
                     showTable(author1.value, author2.value, data_list["degree"]);
@@ -168,10 +211,12 @@
                     var str_id = "str_0";
                     var div = document.createElement("div");
                     div.id = str_id;
-                    div.className = "path container";
+                    div.className = "path z-depth-5";
                     element.appendChild(div);
                     cytoscape(template(str_id, node_list, edge_list));
                 }
+            } else if (xmlhttp.readyState === 4 && xmlhttp.status === 404) {
+                alert("Author Name Not Found");
             }
         };
         xmlhttp.open("GET", "/sprint4_get_plot/" + author1.value + "/" + author2.value, true);
