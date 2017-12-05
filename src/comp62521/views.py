@@ -228,6 +228,7 @@ def data(name):
 def get_home():
     dataset = app.config['DATASET']
     args = {"dataset": dataset, "id": "home"}
+    args['title'] = 'Home'
     return render_template('home.html', args=args)
 
 @app.route("/graphic")
