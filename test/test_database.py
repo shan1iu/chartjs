@@ -368,7 +368,8 @@ class TestDatabase(unittest.TestCase):
         from collections import OrderedDict
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
-        self.assertEqual(db.get_author_graphic(), OrderedDict([(u'AUTHOR1', 1), (u'AUTHOR2', 1)]))
+        self.assertEqual(db.get_author_graphic(), [{'imports': [u'AUTHOR2'], 'name': u'AUTHOR1', 'size': 1},
+                                                   {'imports': [u'AUTHOR1'], 'name': u'AUTHOR2', 'size': 1}])
 
 
 if __name__ == '__main__':
