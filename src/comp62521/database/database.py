@@ -577,6 +577,16 @@ class Database:
             pass
         return paths
 
+    def get_author_graphic(self):
+        from collections import OrderedDict
+        from itertools import islice
+        from operator import itemgetter
+        coauthors = {}
+        for a in self.get_all_authors():
+            coauthors[a] = self.get_coauthor_stat(self.publications, a)
+        order = OrderedDict(sorted(coauthors.items(), key=itemgetter(1), reverse=True))
+        return order
+
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
     PUB_TYPE = {
