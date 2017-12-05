@@ -47,6 +47,17 @@
       <a class="tooltip" href="/statisticsdetails/publication_year" title="Show Publication By Year">By Year</a>
     </li>
   </ul>
+
+    <ul id="dropdown2" class="dropdown-content">
+        <li class="{{args.class_9}}">
+            <a class="tooltip" href="sprint4_get_static_page" title="Author Relationships">Degree of Separation</a>
+        </li>
+        <li class="{{args.class_10}}">
+            <a class="tooltip" href="sprint4_get_static_page" title="Author Network">Author Network</a>
+        </li>
+    </ul>
+
+
   <div class="nav-wrapper">
     <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
     <ul class="left hide-on-med-and-down">
@@ -71,7 +82,7 @@
         <a class="tooltip" href="/search" title="Fuzzy Search For Authors">Search</a>
       </li>
       <li class="{{args.class_9}}">
-        <a class="tooltip" href="/sprint4_get_static_page" title="Find Relationships between two authors">Relation</a>
+        <a class="dropdown-button" href="#" data-activates="dropdown2">Relationships<i class="material-icons right">arrow_drop_down</i></a>
       </li>
     </ul>
     <ul class="side-nav" id="mobile-demo">
