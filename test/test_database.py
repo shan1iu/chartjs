@@ -364,6 +364,12 @@ class TestDatabase(unittest.TestCase):
                              u'AUTHOR2', 'coauthors': 5.0}], 'links':
                              [{'source': 0, 'target': 1}], 'multigraph': False})
 
+    def test_get_author_graphic(self):
+        from collections import OrderedDict
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        self.assertEqual(db.get_author_graphic(), OrderedDict([(u'AUTHOR1', 1), (u'AUTHOR2', 1)]))
+
 
 if __name__ == '__main__':
     unittest.main()
