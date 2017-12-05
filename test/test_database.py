@@ -355,6 +355,14 @@ class TestDatabase(unittest.TestCase):
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         self.assertEqual(db.get_network_data(), ([[u'AUTHOR1', 1], [u'AUTHOR2', 1]], {(0, 1)}))
 
+    def test_get_author_network(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        self.assertEqual(db.get_author_network('author1'),
+                         {'directed': False, 'graph': {}, 'nodes': [{'id': 0, 'colour': 0, 'name': 'author1',
+                                                                     'coauthors': 5.0}, {'id': 1, 'colour': 1, 'name':
+                             u'AUTHOR2', 'coauthors': 5.0}], 'links':
+                             [{'source': 0, 'target': 1}], 'multigraph': False})
 
 
 if __name__ == '__main__':

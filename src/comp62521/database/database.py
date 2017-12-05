@@ -2,6 +2,7 @@ from comp62521.statistics import average
 import itertools
 import numpy as np
 import networkx as nx
+from networkx.readwrite import json_graph
 from xml.sax import handler, make_parser, SAXException
 
 PublicationType = [
@@ -517,6 +518,27 @@ class Database:
                     if author != coauthor:
                         network[author].add(coauthor)
         return network
+
+    def get_author_network(self, name):
+        id = self.get_author_id(name)
+        authors = [name]
+        for pub in self.publications:
+            for a in pub.authors:
+                if a == id:
+                    for a2 in pub.authors:
+                        if a != a2 and self.authors[a2].name not in authors:
+                            authors.append(self.authors[a2].name)
+        network = {i: {0} if i != 0 else {i for i in range(1, len(authors))} for i in range(0, len(authors))}
+        names = {authors.index(i): i for i in authors}
+        total_coauthors = sum([self.get_coauthor_stat(self.publications, a) for a in authors])
+        coauthors = {authors.index(i): self.get_coauthor_stat(self.publications, i) * 10.0 / total_coauthors for i in
+                     authors}
+        colours = {id: 0 if id == 0 else 1 for id in network.keys()}
+        graph = nx.Graph(network)
+        nx.set_node_attributes(graph, 'name', names)
+        nx.set_node_attributes(graph, 'coauthors', coauthors)
+        nx.set_node_attributes(graph, 'colour', colours)
+        return json_graph.node_link_data(graph)
 
     def get_all_author_network_graph(self):
         network = self.get_all_author_network()
