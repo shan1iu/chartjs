@@ -167,15 +167,15 @@ def showPublicationSummary(status):
     return render_template('statistics_details.html', args=args)
 
 
-@app.route("/sprint4_get_static_page")
-def showSprin4GetStaticPage():
+@app.route("/get_degree_static_page")
+def show_degree_of_separation_static_page():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     args = {"dataset": dataset}
     args["title"] = "Degrees of Separation"
     args["class_9"] = "active"
 
-    return render_template("sprint4story4.html", args=args)
+    return render_template("degree_of_separation.html", args=args)
 
 
 @app.route("/sprint_get_name/<name>")
@@ -210,14 +210,27 @@ def show_network():
     dataset = app.config['DATASET']
     args = {"dataset": dataset, "id": "author_network"}
     args['title'] = 'Research Network'
+    args['header'] = ''
     name = ''
     if "name" in request.args:
         name = request.args.get("name")
-        args['title'] = '{}\'s research network'.format(name)
+        args['header'] = '{}\'s research network'.format(name)
     args['name'] = name
+    args["class_10"] = "active"
     return render_template('author_network.html', args=args)
 
 @app.route("/network/<name>")
 def data(name):
     db = app.config['DATABASE']
     return jsonify(db.get_author_network(name))
+
+@app.route("/home")
+def get_home():
+    dataset = app.config['DATASET']
+    args = {"dataset": dataset, "id": "home"}
+    return render_template('home.html', args=args)
+
+@app.route("/graphic")
+def get_home_graphic():
+    db = app.config['DATABASE']
+    return jsonify(db.get_author_graphic())
