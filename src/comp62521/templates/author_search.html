@@ -21,8 +21,7 @@
     {%if args.data | length != 1 and args.data | length > 0 %}
     {% for data in args.data %}
     <tr>
-      <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ data }}',
-        'MyWindow',width=600,height=200); return false;">Stats for {{ data }}</a></td>
+      <td><a href="/authorstatistics/{{ data }}">Stats for {{ data }}</a></td>
     </tr>
     {% endfor %}
     {% elif args.data | length == 1 %}

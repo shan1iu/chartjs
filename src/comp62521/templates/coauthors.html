@@ -56,8 +56,7 @@
     {% set names = data_item.split(' ') %}
     {% set names = names[0:names|length - 1] %}
     {% set names = names|join(' ') %}
-    <td><a href="#" onClick="MyWindow=window.open('/authorstatistics/{{ names }}',
-        'MyWindow',width=600,height=200); return false;">{{ data_item }}</a></td>
+    <td><a href="/authorstatistics/{{ names }}">{{ data_item }}</a></td>
     {% else %}
     <td>{{ data_item }}</td>
     {% endif %}
@@ -74,12 +73,13 @@
   </tfoot>
 </table>
 
-
+<!-- visualize button -->
 <div class="fixed-action-btn" style="bottom: 95px">
-  <a class="btn-floating btn-large tooltip blue" title="Visualize">
+  <a href="{{ args.plotlink }}" class="btn-floating btn-large tooltip blue" title="Visualize">
     <i class="large material-icons">insert_chart</i>
   </a>
 </div>
+<!-- go to top button -->
 <div class="fixed-action-btn">
   <a class="btn-floating btn-large tooltip red" href="#top" title="Go to the top">
     <i class="large material-icons">navigation</i>

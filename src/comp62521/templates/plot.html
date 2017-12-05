@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="row" id="type_id" style="display: none; margin: 2.5rem 0 -1rem 0">
+  <div class="col s12 m3 l3 center">
+    <button class="waves-effect waves-light btn" style="width: 100%; padding: 0;" type="button"
+            id="btn-bar-chart-grouped1" onclick="showPlot(this.id,'bar-chart-grouped1')">Conference Papers
+    </button>
+  </div>
+  <div class="col s12 m2 l2 center">
+    <button class="waves-effect waves-light btn" style="width: 100%; padding: 0;" type="button"
+            id="btn-bar-chart-grouped2" onclick="showPlot(this.id,'bar-chart-grouped2')">Journals
+    </button>
+  </div>
+  <div class="col s12 m2 l2 center">
+    <button class="waves-effect waves-light btn" style="width: 100%; padding: 0;" type="button"
+            id="btn-bar-chart-grouped3" onclick="showPlot(this.id,'bar-chart-grouped3')">Books
+    </button>
+  </div>
+  <div class="col s12 m3 l3 center">
+    <button class="waves-effect waves-light btn" style="width: 100%; padding: 0;" type="button"
+            id="btn-bar-chart-grouped4" onclick="showPlot(this.id,'bar-chart-grouped4')">Book Chapters
+    </button>
+  </div>
+  <div class="col s12 m2 l2 center">
+    <button class="waves-effect waves-light btn" style="width: 100%; padding: 0;" type="button"
+            id="btn-bar-chart-grouped5" onclick="showPlot(this.id,'bar-chart-grouped5')"
+            onload="showPlot(this.value,'bar-chart-grouped5')" disabled>Total
+    </button>
+  </div>
+</div>
+
+<div class="row" style="margin-top: 3rem" id="canvas_id">
+  <canvas id="bar-chart-grouped" style="display: none"></canvas>
+  <canvas id="bar-chart-grouped1" style="display: none"></canvas>
+  <canvas id="bar-chart-grouped2" style="display: none"></canvas>
+  <canvas id="bar-chart-grouped3" style="display: none"></canvas>
+  <canvas id="bar-chart-grouped4" style="display: none"></canvas>
+  <canvas id="bar-chart-grouped5" style="display: block"></canvas>
+</div>
+<div class="fixed-action-btn" style="bottom: 95px">
+  <a href="{{ args.gobacklink }}" class="btn-floating btn-large tooltip green" title="View as table">
+    <i class="large material-icons">view_list</i>
+  </a>
+</div>
+<!-- go to top button -->
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large tooltip red" href="#top" title="Go to the top">
+    <i class="large material-icons">navigation</i>
+  </a>
+</div>
+{% endblock %}
+{% block plotjs %}
+<script src="{{ url_for('static', filename='js/plot.js') }}"></script>
+{%if args.jsfunction == "plotPubSummary" %}
+<script>
+    ajaxDataPubSummary("/plot/publication_summary/data", plotPubSummary);
+</script>
+{% elif args.jsfunction == "plotPubByAuthor" %}
+<script>
+    ajaxDataPubBy("/plot/publication_by_author/data", plotPubByAuthor, '5', 'bar-chart-grouped5');
+    ajaxDataPubBy("/plot/publication_by_author/data", plotPubByAuthor, '1', 'bar-chart-grouped1');
+    ajaxDataPubBy("/plot/publication_by_author/data", plotPubByAuthor, '2', 'bar-chart-grouped2');
+    ajaxDataPubBy("/plot/publication_by_author/data", plotPubByAuthor, '3', 'bar-chart-grouped3');
+    ajaxDataPubBy("/plot/publication_by_author/data", plotPubByAuthor, '4', 'bar-chart-grouped4');
+</script>
+{% elif args.jsfunction == "plotPubByYear" %}
+<script>
+    ajaxDataPubBy("/plot/publication_by_year/data", plotPubByAuthor, '5', 'bar-chart-grouped5');
+    ajaxDataPubBy("/plot/publication_by_year/data", plotPubByAuthor, '1', 'bar-chart-grouped1');
+    ajaxDataPubBy("/plot/publication_by_year/data", plotPubByAuthor, '2', 'bar-chart-grouped2');
+    ajaxDataPubBy("/plot/publication_by_year/data", plotPubByAuthor, '3', 'bar-chart-grouped3');
+    ajaxDataPubBy("/plot/publication_by_year/data", plotPubByAuthor, '4', 'bar-chart-grouped4');
+</script>
+{% elif args.jsfunction == "plotAuthorByYear" %}
+<script>
+    ajaxDataPubBy("/plot/author_by_year/data", plotPubByAuthor, '5', 'bar-chart-grouped5');
+    ajaxDataPubBy("/plot/author_by_year/data", plotPubByAuthor, '1', 'bar-chart-grouped1');
+    ajaxDataPubBy("/plot/author_by_year/data", plotPubByAuthor, '2', 'bar-chart-grouped2');
+    ajaxDataPubBy("/plot/author_by_year/data", plotPubByAuthor, '3', 'bar-chart-grouped3');
+    ajaxDataPubBy("/plot/author_by_year/data", plotPubByAuthor, '4', 'bar-chart-grouped4');
+</script>
+{% elif args.jsfunction == "plotAverages" %}
+<script>
+    ajaxDataAverages("/plot/averages/data");
+    //    ajaxDataAverages("/plot/averages/data", plotPubByAuthor, '2', 'bar-chart-grouped2');
+    //    ajaxDataAverages("/plot/averages/data", plotPubByAuthor, '3', 'bar-chart-grouped3');
+    //    ajaxDataAverages("/plot/averages/data", plotPubByAuthor, '4', 'bar-chart-grouped4');
+</script>
+{% else %}
+{% endif %}
+{% endblock %}
