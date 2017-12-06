@@ -83,13 +83,6 @@
     ajaxDataPubBy("/plot/author_by_year/data", plotPubByAuthor, '3', 'bar-chart-grouped3');
     ajaxDataPubBy("/plot/author_by_year/data", plotPubByAuthor, '4', 'bar-chart-grouped4');
 </script>
-{% elif args.jsfunction == "plotAverages" %}
-<script>
-    ajaxDataAverages("/plot/averages/data");
-    //    ajaxDataAverages("/plot/averages/data", plotPubByAuthor, '2', 'bar-chart-grouped2');
-    //    ajaxDataAverages("/plot/averages/data", plotPubByAuthor, '3', 'bar-chart-grouped3');
-    //    ajaxDataAverages("/plot/averages/data", plotPubByAuthor, '4', 'bar-chart-grouped4');
-</script>
 {% else %}
 {% endif %}
 {% endblock %}

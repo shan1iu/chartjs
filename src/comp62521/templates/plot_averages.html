@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="row" style="margin-top: 4rem;" id="canvas_doughnut_id">
+  <div class="col s12 m12 l6 xl4">
+    <canvas id="doughnut-chart-grouped1" height="400px"></canvas>
+  </div>
+  <div class="col s12 m12 l6 xl4">
+    <canvas id="doughnut-chart-grouped2" height="400px"></canvas>
+  </div>
+  <div class="col s12 m12 l6 xl4">
+    <canvas id="doughnut-chart-grouped3" height="400px"></canvas>
+  </div>
+  <div class="col s12 m12 l6 xl4">
+    <canvas id="doughnut-chart-grouped4" height="400px"></canvas>
+  </div>
+</div>
+<div class="fixed-action-btn" style="bottom: 95px">
+  <a href="{{ args.gobacklink }}" class="btn-floating btn-large tooltip green" title="View as table">
+    <i class="large material-icons">view_list</i>
+  </a>
+</div>
+<!-- go to top button -->
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large tooltip red" href="#top" title="Go to the top">
+    <i class="large material-icons">navigation</i>
+  </a>
+</div>
+{% endblock %}
+{% block plotjs %}
+<script src="{{ url_for('static', filename='js/plot.js') }}"></script>
+{%if args.jsfunction == "plotAverages" %}
+<script>
+    ajaxDataAverages("/plot/averages/data", "doughnut-chart-grouped1", plotPubAverages, 3);
+    ajaxDataAverages("/plot/averages/data", "doughnut-chart-grouped2", plotPubAverages, 1);
+    ajaxDataAverages("/plot/averages/data", "doughnut-chart-grouped3", plotPubAverages, 2);
+    ajaxDataAverages("/plot/averages/data", "doughnut-chart-grouped4", plotPubAverages, 3);
+</script>
+{% else %}
+{% endif %}
+{% endblock %}

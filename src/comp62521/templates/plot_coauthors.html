@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block plot_bubble %}
+<div class="row" style="margin-bottom: 0;" id="canvas_doughnut_id">
+  <canvas id="bubble-chart" width="100%"></canvas>
+</div>
+<div class="fixed-action-btn" style="bottom: 95px;margin-right: 2rem;">
+  <a href="{{ args.gobacklink }}" class="btn-floating btn-large tooltip green" title="View as table">
+    <i class="large material-icons">view_list</i>
+  </a>
+</div>
+<!-- go to top button -->
+<div class="fixed-action-btn" style="margin-right: 2rem;">
+  <a class="btn-floating btn-large tooltip red" href="#top" title="Go to the top">
+    <i class="large material-icons">navigation</i>
+  </a>
+</div>
+{% endblock %}
+{% block plotjs %}
+<script src="{{ url_for('static', filename='js/plot.js') }}"></script>
+{%if args.jsfunction == "plotCoauthor" %}
+<script>
+    var path = window.location.pathname;
+    var pub_type = path.slice(16, 17);
+    var start_year = path.slice(18, 22);
+    var end_year = path.slice(23, 27);
+    ajaxDataCoauthor("/plot/coauthors/data/" + pub_type + "/" + start_year + "/" + end_year, plotCoauthor, "bubble-chart");
+</script>
+{% else %}
+{% endif %}
+{% endblock %}
