@@ -336,7 +336,7 @@ def data(name):
 @app.route("/")
 def get_home():
     dataset = app.config['DATASET']
-    args = {"dataset": dataset, "id": "home", 'title': 'Home'}
+    args = {"dataset": dataset, "id": "home", 'title': 'Home', 'class_1': 'active'}
     return render_template('home.html', args=args)
 
 
