@@ -200,7 +200,8 @@
                 var data_list = JSON.parse(json_data);
                 //console.log(data_list["data"].length, author1.value, author2.value);
                 if (data_list["data"].length === 0 || author1.value === "" || author1.value === "") {
-                    alert("Author Name Not Found");
+                    data_list["degree"] = 'X'
+                    showTable(author1.value, author2.value, data_list["degree"]);
                 } else {
                     showTable(author1.value, author2.value, data_list["degree"]);
                     var element = document.getElementById("plot_content");
@@ -216,7 +217,7 @@
                     cytoscape(template(str_id, node_list, edge_list));
                 }
             } else if (xmlhttp.readyState === 4 && xmlhttp.status === 404) {
-                alert("Author Name Not Found");
+                alert("Please enter an author name");
             }
         };
         xmlhttp.open("GET", "/sprint4_get_plot/" + author1.value + "/" + author2.value, true);

@@ -95,12 +95,12 @@ def showCoAuthors():
     return render_template("coauthors.html", args=args)
 
 
-@app.route("/")
-def showStatisticsMenu():
-    dataset = app.config['DATASET']
-    args = {"dataset": dataset, }
-    args["class_1"] = "active"
-    return render_template('statistics.html', args=args)
+# @app.route("/")
+# def showStatisticsMenu():
+#     dataset = app.config['DATASET']
+#     args = {"dataset": dataset, }
+#     args["class_1"] = "active"
+#     return render_template('statistics.html', args=args)
 
 
 @app.route("/author_stats")
@@ -411,7 +411,7 @@ def data(name):
     return jsonify(db.get_author_network(name))
 
 
-@app.route("/home")
+@app.route("/")
 def get_home():
     dataset = app.config['DATASET']
     args = {"dataset": dataset, "id": "home"}
