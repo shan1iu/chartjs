@@ -181,7 +181,7 @@ function plotPubByAuthor(data, type, canvas_id) {
         dataForPlot_bg_color.push(bg_color_list[Math.floor(Math.random() * bg_color_list.length)]);
     }
 
-    var lengthOfCanvas = dataOfType.length * 10;
+    var lengthOfCanvas = dataOfType.length * 6;
     $("#" + canvas_id).attr("height", lengthOfCanvas);
     var ctx = document.getElementById(canvas_id).getContext('2d');
     var myChart = new Chart(ctx, {
