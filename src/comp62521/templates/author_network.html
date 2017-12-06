@@ -141,7 +141,7 @@
 
         node.on("mouseover", function (d) {
             d3.select(this).select("circle").transition().duration(750).attr("r", function (d) {
-                return Math.sqrt(d.coauthors) * 37.5
+                return Math.sqrt(d.coauthors) * 25
             }).attr("fill", function (d) {
                 return d.colour === 0 ? 'red' : 'cyan'
             })
