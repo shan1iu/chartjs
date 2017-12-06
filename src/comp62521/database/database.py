@@ -369,43 +369,6 @@ class Database:
                     links.add((a, a2))
         return nodes, links
 
-    def first_last_author(self, name):
-        name = ' '.join(name.strip().split())
-        first = 0
-        last = 0
-        sole = 0
-        for pub in self.publications:
-            if self.authors[pub.authors[0]].name.lower() == name.lower():
-                if len(pub.authors) == 1:
-                    sole += 1
-                else:
-                    first += 1
-            if self.authors[pub.authors[len(pub.authors) - 1]].name.lower() == name.lower():
-                if len(pub.authors) != 1:
-                    last += 1
-        return first, last, sole
-
-    def get_first_last_sole(self):
-        header = ("Name", "First Author", "Last Author", "Sole Author")
-        data = []
-        for i in range(len(self.authors)):
-            first, last, sole = self.first_last_author(self.authors[i].name)
-            data.append((self.authors[i].name, first, last, sole))
-        return header, data
-
-    def get_author_stats(self):
-        header, data = self.get_publications_by_author()
-        header = ("Author", "Number of conference papers",
-                  "Number of journals", "Number of books",
-                  "Number of book chapters", "Total publications", "Coauthors", "First", "Last")
-        for i in range(len(data)):
-            first, last, _ = self.first_last_author(data[i][0])
-            coauthors = self.get_coauthor_details(data[i][0])
-            data[i].append(len(coauthors) - 1)
-            data[i].append(first)
-            data[i].append(last)
-        return header, data
-
     def get_first_author_stat(self, pubs, name):
         first = 0
         for p in pubs:

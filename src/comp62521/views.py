@@ -1,6 +1,7 @@
+from flask import (render_template, request, jsonify)
+
 from comp62521 import app
 from database import database
-from flask import (render_template, request, jsonify, json, Response)
 
 
 def format_data(data):
@@ -15,11 +16,10 @@ def format_data(data):
 
 
 @app.route("/averages")
-def showAverages():
+def show_averages():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
-    args = {"dataset": dataset, "id": "averages", 'title': "Averaged Data"}
-    args["plotlink"] = "/plot/averages"
+    args = {"dataset": dataset, "id": "averages", 'title': "Averaged Data", "plotlink": "/plot/averages"}
     tables = []
     headers = ["Average", "Conference Paper", "Journal", "Book", "Book Chapter", "All Publications"]
     averages = [database.Stat.MEAN, database.Stat.MEDIAN, database.Stat.MODE]
@@ -62,13 +62,12 @@ def showAverages():
 
 
 @app.route("/coauthors")
-def showCoAuthors():
+def show_coauthors():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
-    PUB_TYPES = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
-    args = {"dataset": dataset, "id": "coauthors", "title": "Co-Authors"}
-    args["class_7"] = "active"
-    args["plotlink"] = "/plot/coauthors"
+    pub_types = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
+    args = {"dataset": dataset, "id": "coauthors", "title": "Co-Authors", "class_7": "active",
+            "plotlink": "/plot/coauthors"}
 
     start_year = db.min_year
     if "start_year" in request.args:
@@ -90,25 +89,8 @@ def showCoAuthors():
     args["max_year"] = db.max_year
     args["start_year"] = start_year
     args["end_year"] = end_year
-    args["pub_str"] = PUB_TYPES[pub_type]
+    args["pub_str"] = pub_types[pub_type]
     return render_template("coauthors.html", args=args)
-
-
-# @app.route("/")
-# def showStatisticsMenu():
-#     dataset = app.config['DATASET']
-#     args = {"dataset": dataset, }
-#     args["class_1"] = "active"
-#     return render_template('statistics.html', args=args)
-
-
-@app.route("/author_stats")
-def show_author_stats():
-    dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset": dataset, "id": "author_stats", 'title': "Comprehensive Author Stats",
-            "data": db.get_author_stats()}
-    return render_template('author_stats.html', args=args)
 
 
 @app.route("/search")
@@ -129,19 +111,14 @@ def search_for_author():
 def show_author_statistics(name):
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
-    args = {"dataset": dataset, "name": name}
-    args["title"] = "Comprehensive Statistics for " + name
-    args["data"] = db.get_all_author_stats(name)
+    args = {"dataset": dataset, "name": name, "title": "Comprehensive Statistics for " + name,
+            "data": db.get_all_author_stats(name)}
 
     return render_template('author_statistics.html', args=args)
 
 
-# @app.route("/plot/publication_summary")
-# @app.route("/plot/publication_by_author")
-# @app.route("/plot/publication_by_year")
-# @app.route("/plot/author_by_year")
 @app.route("/statisticsdetails/<status>")
-def showPublicationSummary(status):
+def show_publication_summary(status):
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     args = {"dataset": dataset, "id": status}
@@ -170,28 +147,20 @@ def showPublicationSummary(status):
         args["class_5"] = "active"
         args["plotlink"] = "/plot/author_by_year"
 
-    if status == "author_first_last_sole":
-        args["title"] = "First, Last and Sole "
-        args["data"] = db.get_first_last_sole()
-
     return render_template('statistics_details.html', args=args)
 
 
 @app.route("/get_degree_static_page")
 def show_degree_of_separation_static_page():
     dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset": dataset}
-    args["title"] = "Degrees of Separation"
-    args["class_9"] = "active"
+    args = {"dataset": dataset, "title": "Degrees of Separation", "class_9": "active"}
 
     return render_template("degree_of_separation.html", args=args)
 
 
-@app.route("/sprint_get_name/<name>")
-def showSprintGetName(name):
+@app.route("/get_name/<name>")
+def get_author_name(name):
     name = name.lower()
-    dataset = app.config['DATASET']
     db = app.config['DATABASE']
     all_authors = db.get_all_authors()
     return_author = list()
@@ -199,121 +168,90 @@ def showSprintGetName(name):
         lower_author = author.lower() + ""
         if lower_author.startswith(name) or lower_author.startswith(name.upper()):
             return_author.append(author)
-    # print return_author
     return jsonify({'data': return_author})
 
 
-@app.route("/sprint4_get_plot/<author1>/<author2>")
-def showSprintGetPlot(author1, author2):
+@app.route("/get_plot/<author1>/<author2>")
+def get_plot(author1, author2):
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
-    args = {"dataset": dataset}
-    args["title"] = "Sprint4 Story4"
+    args = {"dataset": dataset, "title": "Sprint4 Story4"}
     graph = db.get_all_author_network_graph()
     path = db.get_all_shortest_paths(graph, author1, author2)
     degree = db.get_degree_of_separation(graph, author1, author2)
-    # print "data : ", type(jsonify({'devices': data}))
     return jsonify({'data': path, 'degree': degree})
 
 
 @app.route("/plot/publication_summary")
-def showPlotPublicationSummary():
+def plot_publication_summary():
     dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset": dataset}
-    args["title"] = "Graph - Publication Summary"
-    args["gobacklink"] = "/statisticsdetails/publication_summary"
-    args["class_2"] = "active"
-    args["jsfunction"] = "plotPubSummary"
+    args = {"dataset": dataset, "title": "Graph - Publication Summary",
+            "gobacklink": "/statisticsdetails/publication_summary", "class_2": "active", "jsfunction": "plotPubSummary"}
     return render_template("plot.html", args=args)
 
 
 @app.route("/plot/publication_summary/data")
-def showPlotPublicationSummaryData():
-    dataset = app.config['DATASET']
+def plot_publication_summary_data():
     db = app.config['DATABASE']
     data = db.get_publication_summary()
     return jsonify({"data": data})
 
 
 @app.route("/plot/publication_by_author")
-def showPlotPublicationByAuthor():
+def plot_publication_by_author():
     dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset": dataset}
-    args["title"] = "Graph - Publication By Author"
-    args["gobacklink"] = "/statisticsdetails/publication_author"
-    args["class_3"] = "active"
-    args["jsfunction"] = "plotPubByAuthor"
+    args = {"dataset": dataset, "title": "Graph - Publication By Author",
+            "gobacklink": "/statisticsdetails/publication_author", "class_3": "active", "jsfunction": "plotPubByAuthor"}
     return render_template("plot.html", args=args)
 
 
 @app.route("/plot/publication_by_author/data")
-def showPlotPublicationByAuthorData():
-    dataset = app.config['DATASET']
+def plot_publication_by_author_data():
     db = app.config['DATABASE']
     data = db.get_publications_by_author()
     return jsonify({"data": data})
 
 
-# @app.route("/plot/publication_by_year")
 @app.route("/plot/publication_by_year")
-def showPlotPublicationByYear():
+def plot_publication_by_year():
     dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset": dataset}
-    args["title"] = "Graph - Publication By Year"
-    args["gobacklink"] = "/statisticsdetails/publication_year"
-    args["class_4"] = "active"
-    args["jsfunction"] = "plotPubByYear"
+    args = {"dataset": dataset, "title": "Graph - Publication By Year",
+            "gobacklink": "/statisticsdetails/publication_year", "class_4": "active", "jsfunction": "plotPubByYear"}
     return render_template("plot.html", args=args)
 
 
 @app.route("/plot/publication_by_year/data")
-def showPlotPublicationByYearData():
-    dataset = app.config['DATASET']
+def plot_publication_by_year_data():
     db = app.config['DATABASE']
     data = db.get_publications_by_year()
     return jsonify({"data": data})
 
 
-# @app.route("/plot/author_by_year")
 @app.route("/plot/author_by_year")
-def showPlotAuthorByYear():
+def plot_author_by_year():
     dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset": dataset}
-    args["title"] = "Graph - Author By Year"
-    args["gobacklink"] = "/statisticsdetails/author_year"
-    args["class_5"] = "active"
-    args["jsfunction"] = "plotAuthorByYear"
+    args = {"dataset": dataset, "title": "Graph - Author By Year", "gobacklink": "/statisticsdetails/author_year",
+            "class_5": "active", "jsfunction": "plotAuthorByYear"}
     return render_template("plot.html", args=args)
 
 
 @app.route("/plot/author_by_year/data")
-def showPlotAuthorByYearData():
-    dataset = app.config['DATASET']
+def plot_author_by_year_data():
     db = app.config['DATABASE']
     data = db.get_author_totals_by_year()
     return jsonify({"data": data})
 
 
-# @app.route("/plot/averages")
 @app.route("/plot/averages")
-def showPlotAverages():
+def plot_averages():
     dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset": dataset}
-    args["title"] = "Graph - Averages"
-    args["gobacklink"] = "/averages"
-    args["class_6"] = "active"
-    args["jsfunction"] = "plotAverages"
+    args = {"dataset": dataset, "title": "Graph - Averages", "gobacklink": "/averages", "class_6": "active",
+            "jsfunction": "plotAverages"}
     return render_template("plot_averages.html", args=args)
 
 
 @app.route("/plot/averages/data")
-def showPlotAveragesData():
-    dataset = app.config['DATASET']
+def plot_averages_ata():
     db = app.config['DATABASE']
     args = dict()
     args["plotlink"] = "/plot/averages"
@@ -358,42 +296,28 @@ def showPlotAveragesData():
     return jsonify({"data": args['tables']})
 
 
-# plot/coauthors/3/1980/1991
-# @app.route("/plot/coauthors")
 @app.route("/plot/coauthors/<pub_type>/<start_year>/<end_year>")
-def showPlotCoauthors(pub_type, start_year, end_year):
+def plot_coauthors(pub_type, start_year, end_year):
     dataset = app.config['DATASET']
-    db = app.config['DATABASE']
-    args = {"dataset": dataset}
-    args["title"] = "Graph - Co-author"
-    args["gobacklink"] = "/coauthors"
-    args["class_7"] = "active"
-    args["jsfunction"] = "plotCoauthor"
+    args = {"dataset": dataset, "title": "Graph - Co-author", "gobacklink": "/coauthors", "class_7": "active",
+            "jsfunction": "plotCoauthor"}
     return render_template("plot_coauthors.html", args=args)
 
 
 @app.route("/plot/coauthors/data/<pub_type>/<start_year>/<end_year>")
-def showPlotCoauthorsData(pub_type, start_year, end_year):
+def plot_coauthors_data(pub_type, start_year, end_year):
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
-    data = db.get_author_totals_by_year()
-    PUB_TYPES = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
-    args = {"dataset": dataset, "id": "coauthors", "title": "Co-Authors"}
-    args["class_8"] = "active"
-    args["plotlink"] = "/plot/coauthors"
-    args["data"] = db.get_coauthor_data(int(start_year), int(end_year), int(pub_type))
-    args["start_year"] = start_year
-    args["end_year"] = end_year
-    args["pub_type"] = pub_type
+    args = {"dataset": dataset, "id": "coauthors", "title": "Co-Authors", "class_8": "active",
+            "plotlink": "/plot/coauthors", "data": db.get_coauthor_data(int(start_year), int(end_year), int(pub_type)),
+            "start_year": start_year, "end_year": end_year, "pub_type": pub_type}
     return jsonify({"data": args["data"]})
 
 
 @app.route("/author_network")
 def show_network():
     dataset = app.config['DATASET']
-    args = {"dataset": dataset, "id": "author_network"}
-    args['title'] = 'Research Network'
-    args['header'] = ''
+    args = {"dataset": dataset, "id": "author_network", 'title': 'Research Network', 'header': ''}
     name = ''
     if "name" in request.args:
         name = request.args.get("name")
@@ -412,8 +336,7 @@ def data(name):
 @app.route("/")
 def get_home():
     dataset = app.config['DATASET']
-    args = {"dataset": dataset, "id": "home"}
-    args['title'] = 'Home'
+    args = {"dataset": dataset, "id": "home", 'title': 'Home'}
     return render_template('home.html', args=args)
 
 

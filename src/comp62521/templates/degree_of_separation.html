@@ -8,13 +8,13 @@
     <input type="text" id="search_box_1" name="a" onkeyup="showHint(this.value, 'search_box_1')"
            onblur="keywordBlur()"
            onfocus="showHint(this.value, 'search_box_1')">
-    <label for="search_box_1">First author</label>
+    <label for="search_box_1">Author</label>
   </div>
   <div class="input-field col m5 s12">
     <input type="text" id="search_box_2" name="b" onkeyup="showHint(this.value, 'search_box_2')"
            onblur="keywordBlur()"
            onfocus="showHint(this.value, 'search_box_2')">
-    <label for="search_box_1">Second author</label>
+    <label for="search_box_1">Author</label>
   </div>
   <div class="input-field col m2 s12">
     <button class="waves-effect waves-light btn-large center-align" type="button" name="action" onclick="showResult()"
@@ -141,7 +141,7 @@
                     }
                 }
             };
-            xmlhttp.open("GET", "/sprint_get_name/" + str, true);
+            xmlhttp.open("GET", "/get_name/" + str, true);
             xmlhttp.send();
         }
     }
@@ -234,7 +234,7 @@
                 alert("Please enter an author name");
             }
         };
-        xmlhttp.open("GET", "/sprint4_get_plot/" + author1.value + "/" + author2.value, true);
+        xmlhttp.open("GET", "/get_plot/" + author1.value + "/" + author2.value, true);
         xmlhttp.send();
     }
 </script>
