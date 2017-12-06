@@ -180,8 +180,13 @@ function plotPubByAuthor(data, type, canvas_id) {
         dataForPlot_data.push(dataOfType[p]["data"]);
         dataForPlot_bg_color.push(bg_color_list[Math.floor(Math.random() * bg_color_list.length)]);
     }
+    var lengthOfCanvas = 0;
+    if (dataOfType.length < 300) {
+        lengthOfCanvas = dataOfType.length * 12;
+    } else {
+        lengthOfCanvas = dataOfType.length * 6;
+    }
 
-    var lengthOfCanvas = dataOfType.length * 6;
     $("#" + canvas_id).attr("height", lengthOfCanvas);
     var ctx = document.getElementById(canvas_id).getContext('2d');
     var myChart = new Chart(ctx, {
@@ -223,8 +228,8 @@ function plotPubAverages(data, canvas_id, data_id) {
     console.log("data : ", data[data_id], "canvas_id : ", canvas_id);
     var text = data[data_id]["title"];
     var labels = data[data_id]["header"].slice(1);
-    console.log(data[data_id]["rows"][0].slice(1));
-    console.log(data[data_id]["rows"][1].slice(1));
+    //console.log(data[data_id]["rows"][0].slice(1));
+    //console.log(data[data_id]["rows"][1].slice(1));
     var ctx = document.getElementById(canvas_id).getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'doughnut',
@@ -261,6 +266,9 @@ function plotPubAverages(data, canvas_id, data_id) {
             },
             tooltips: {
                 enabled: true
+            },
+            scaleLabel: {
+                display: true
             }
         }
     });
@@ -324,16 +332,16 @@ function plotCoauthor(data, canvas_id) {
         var nameOfAuthor = data[1][i][0].split(" ").slice(0, data[1][i][0].split(" ").length - 1).join(" ");
         var int_numOfCoauthor = parseInt(numOfCoauthor);
         /*
-        if (int_numOfCoauthor > 200) {
-            int_numOfCoauthor /= 5;//40
-        } else if (int_numOfCoauthor < 200 && int_numOfCoauthor > 150) {
-            int_numOfCoauthor /= 5.2//38 28.84
-        } else if (int_numOfCoauthor < 150 && int_numOfCoauthor > 100) {
-            int_numOfCoauthor /= 4;//37.25  25
-        } else if (int_numOfCoauthor < 100 && int_numOfCoauthor > 50) {
-            int_numOfCoauthor /= 2.8;//35.35 17.5
-        }
-        */
+         if (int_numOfCoauthor > 200) {
+         int_numOfCoauthor /= 5;//40
+         } else if (int_numOfCoauthor < 200 && int_numOfCoauthor > 150) {
+         int_numOfCoauthor /= 5.2//38 28.84
+         } else if (int_numOfCoauthor < 150 && int_numOfCoauthor > 100) {
+         int_numOfCoauthor /= 4;//37.25  25
+         } else if (int_numOfCoauthor < 100 && int_numOfCoauthor > 50) {
+         int_numOfCoauthor /= 2.8;//35.35 17.5
+         }
+         */
         var _x = Math.floor(Math.random() * 900);
         var _y = Math.floor(Math.random() * 450);
         var _bgbdColor = bg_bd_color();

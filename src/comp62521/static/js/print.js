@@ -79,7 +79,12 @@ function parseData(data) {
     return [result_nodes, result_edges];
 }
 
-function template(id, arg_node, arg_edge) {
+function template(id, arg_node, arg_edge, flag) {
+    //console.log(id, arg_node, arg_edge, flag);
+    //console.log(typeof id, typeof arg_node, typeof arg_edge, typeof flag);
+    var width = flag ? 2 : 0.5;
+    var lineStyle = flag ? "solid" : "dashed";
+    var arrow = flag ? 'triangle' : "none";
     return {
         container: document.getElementById(id),
         boxSelectionEnabled: false,
@@ -105,13 +110,14 @@ function template(id, arg_node, arg_edge) {
                 selector: 'edge',
                 style: {
                     'curve-style': 'segments',
-                    'width': 2,
-                    'target-arrow-shape': 'triangle',
+                    'width': width,
+                    'target-arrow-shape': arrow,
                     'background-color': 'black',
                     'line-color': 'black',
                     'target-arrow-color': 'black',
                     'source-arrow-color': 'black',
-                    'text-outline-color': 'black'
+                    'text-outline-color': 'black',
+                    'line-style': lineStyle
                 }
             }
         ],

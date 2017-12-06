@@ -91,7 +91,6 @@ def showCoAuthors():
     args["start_year"] = start_year
     args["end_year"] = end_year
     args["pub_str"] = PUB_TYPES[pub_type]
-    print args["data"]
     return render_template("coauthors.html", args=args)
 
 
@@ -234,7 +233,6 @@ def showPlotPublicationSummaryData():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     data = db.get_publication_summary()
-    print data
     return jsonify({"data": data})
 
 
