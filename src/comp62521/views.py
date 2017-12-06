@@ -91,6 +91,7 @@ def showCoAuthors():
     args["start_year"] = start_year
     args["end_year"] = end_year
     args["pub_str"] = PUB_TYPES[pub_type]
+    print args["data"]
     return render_template("coauthors.html", args=args)
 
 
@@ -215,7 +216,6 @@ def showSprintGetPlot(author1, author2):
     # print "data : ", type(jsonify({'devices': data}))
     return jsonify({'data': path, 'degree': degree})
 
-<<<<<<< HEAD
 
 @app.route("/plot/publication_summary")
 def showPlotPublicationSummary():
@@ -225,7 +225,7 @@ def showPlotPublicationSummary():
     args["title"] = "Graph - Publication Summary"
     args["gobacklink"] = "/statisticsdetails/publication_summary"
     args["class_2"] = "active"
-    args["jsfunction"] = "plotPubSummary";
+    args["jsfunction"] = "plotPubSummary"
     return render_template("plot.html", args=args)
 
 
@@ -307,10 +307,10 @@ def showPlotAverages():
     db = app.config['DATABASE']
     args = {"dataset": dataset}
     args["title"] = "Graph - Averages"
-    args["gobacklink"] = "/statisticsdetails/averages"
+    args["gobacklink"] = "/averages"
     args["class_6"] = "active"
     args["jsfunction"] = "plotAverages"
-    return render_template("plot.html", args=args)
+    return render_template("plot_averages.html", args=args)
 
 
 @app.route("/plot/averages/data")
@@ -357,10 +357,37 @@ def showPlotAveragesData():
 
     args['tables'] = tables
     args['class_6'] = "active"
-    print args['tables']
     return jsonify({"data": args['tables']})
 
+
+# plot/coauthors/3/1980/1991
 # @app.route("/plot/coauthors")
+@app.route("/plot/coauthors/<pub_type>/<start_year>/<end_year>")
+def showPlotCoauthors(pub_type, start_year, end_year):
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset}
+    args["title"] = "Graph - Co-author"
+    args["gobacklink"] = "/coauthors"
+    args["class_7"] = "active"
+    args["jsfunction"] = "plotCoauthor"
+    return render_template("plot_coauthors.html", args=args)
+
+
+@app.route("/plot/coauthors/data/<pub_type>/<start_year>/<end_year>")
+def showPlotCoauthorsData(pub_type, start_year, end_year):
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    data = db.get_author_totals_by_year()
+    PUB_TYPES = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
+    args = {"dataset": dataset, "id": "coauthors", "title": "Co-Authors"}
+    args["class_8"] = "active"
+    args["plotlink"] = "/plot/coauthors"
+    args["data"] = db.get_coauthor_data(int(start_year), int(end_year), int(pub_type))
+    args["start_year"] = start_year
+    args["end_year"] = end_year
+    args["pub_type"] = pub_type
+    return jsonify({"data": args["data"]})
 
 
 @app.route("/author_network")
@@ -374,6 +401,7 @@ def show_network():
         args['title'] = 'Research Network for {}'.format(name)
     args['name'] = name
     return render_template('author_network.html', args=args)
+
 
 @app.route("/data/<name>")
 def data(name):
