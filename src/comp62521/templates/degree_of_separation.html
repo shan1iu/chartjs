@@ -77,7 +77,6 @@
         setTimeout(clearContent, 10);
     }
     function setLocation(search_box_id) {
-        console.log(search_box_id);
         var content = document.getElementById(search_box_id);
         var pop_content_body = document.getElementById("pop_content_body");
         var pop_content_table = document.getElementById("pop_content_table");
@@ -86,7 +85,6 @@
         var top = content["offsetTop"] + content.offsetHeight;
         if (search_box_id === "search_box_1") {
             pop_content_table.style.left = left + "px";
-            console.log(search_box_id + ":" + pop_content_body.style.left);
         } else {
             pop_content_table.style.left = (left + width) + "px";
         }
@@ -171,7 +169,6 @@
     }
     function showResult() {
         var widthOfSreen = $(document).width();
-        console.log(widthOfSreen);
         if (widthOfSreen > 1200) {
             $("#plot_content").html("").height(widthOfSreen / 2.7);
         } else if (widthOfSreen > 1000 && widthOfSreen <= 1200) {
@@ -199,9 +196,26 @@
                 var json_data = JSON.stringify(xmlhttp.response);
                 var data_list = JSON.parse(json_data);
                 //console.log(data_list["data"].length, author1.value, author2.value);
-                if (data_list["data"].length === 0 || author1.value === "" || author1.value === "") {
-                    data_list["degree"] = 'X'
+                var flag = true;
+                if (data_list["data"].length === 0) {
+                    console.log(data_list);
+                    data_list["degree"] = 'X';
                     showTable(author1.value, author2.value, data_list["degree"]);
+                    flag = false;
+                    var element = document.getElementById("plot_content");
+                    var nodes = [
+                        {data: {id: dropWhitespace(author1.value), name: author1.value}},
+                        {data: {id: dropWhitespace(author2.value), name: author2.value}}
+                    ];
+                    var edges = [
+                        {data: {source: dropWhitespace(author1.value), target: dropWhitespace(author2.value)}}
+                    ];
+                    var str_id = "str_0";
+                    var div = document.createElement("div");
+                    div.id = str_id;
+                    div.className = "path z-depth-5";
+                    element.appendChild(div);
+                    cytoscape(template(str_id, nodes, edges, flag));
                 } else {
                     showTable(author1.value, author2.value, data_list["degree"]);
                     var element = document.getElementById("plot_content");
@@ -214,7 +228,7 @@
                     div.id = str_id;
                     div.className = "path z-depth-5";
                     element.appendChild(div);
-                    cytoscape(template(str_id, node_list, edge_list));
+                    cytoscape(template(str_id, node_list, edge_list, flag));
                 }
             } else if (xmlhttp.readyState === 4 && xmlhttp.status === 404) {
                 alert("Please enter an author name");

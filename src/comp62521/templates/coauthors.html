@@ -18,7 +18,7 @@
     <div class="input-field col m6 l3 s12" style="margin-top: 2.5rem;">
       <select name="pub_type">
         <option value="" disabled selected></option>
-        <option value="4">All Publications</option>
+        <option value="4" {% if args.pub_type== 4 %} selected="selected" {% endif %}>All Publications</option>
         <option value="0" {% if args.pub_type== 0 %} selected="selected" {% endif %}>Conference Paper</option>
         <option value="1" {% if args.pub_type== 1 %} selected="selected" {% endif %}>Journal</option>
         <option value="2" {% if args.pub_type== 2 %} selected="selected" {% endif %}>Book</option>
