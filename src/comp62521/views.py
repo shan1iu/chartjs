@@ -215,7 +215,6 @@ def showSprintGetPlot(author1, author2):
     # print "data : ", type(jsonify({'devices': data}))
     return jsonify({'data': path, 'degree': degree})
 
-<<<<<<< HEAD
 
 @app.route("/plot/publication_summary")
 def showPlotPublicationSummary():
@@ -225,7 +224,7 @@ def showPlotPublicationSummary():
     args["title"] = "Graph - Publication Summary"
     args["gobacklink"] = "/statisticsdetails/publication_summary"
     args["class_2"] = "active"
-    args["jsfunction"] = "plotPubSummary";
+    args["jsfunction"] = "plotPubSummary"
     return render_template("plot.html", args=args)
 
 
@@ -360,6 +359,7 @@ def showPlotAveragesData():
     print args['tables']
     return jsonify({"data": args['tables']})
 
+
 # @app.route("/plot/coauthors")
 
 
@@ -377,10 +377,12 @@ def show_network():
     args["class_10"] = "active"
     return render_template('author_network.html', args=args)
 
+
 @app.route("/network/<name>")
 def data(name):
     db = app.config['DATABASE']
     return jsonify(db.get_author_network(name))
+
 
 @app.route("/home")
 def get_home():
@@ -388,6 +390,7 @@ def get_home():
     args = {"dataset": dataset, "id": "home"}
     args['title'] = 'Home'
     return render_template('home.html', args=args)
+
 
 @app.route("/graphic")
 def get_home_graphic():
