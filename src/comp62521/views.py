@@ -405,7 +405,7 @@ def show_network():
     return render_template('author_network.html', args=args)
 
 
-@app.route("/data/<name>")
+@app.route("/network/<name>")
 def data(name):
     db = app.config['DATABASE']
     return jsonify(db.get_author_network(name))
