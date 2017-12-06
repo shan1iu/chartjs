@@ -47,11 +47,22 @@
       <a class="tooltip" href="/statisticsdetails/publication_year" title="Show Publication By Year">By Year</a>
     </li>
   </ul>
+
+    <ul id="dropdown2" class="dropdown-content">
+        <li class="{{args.class_9}}">
+            <a class="tooltip" href="/get_degree_static_page" title="Author Relationships">Degree of Separation</a>
+        </li>
+        <li class="{{args.class_10}}">
+            <a class="tooltip" href="/author_network" title="Author Network">Author Network</a>
+        </li>
+    </ul>
+
+
   <div class="nav-wrapper">
     <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
     <ul class="left hide-on-med-and-down">
       <li class="{{args.class_1}}">
-        <a class="tooltip" href="/" title="Go Back To Homepage">
+        <a class="tooltip" href="/home" title="Go Back To Homepage">
           <i class="large material-icons">home</i>
         </a>
       </li>
@@ -71,12 +82,12 @@
         <a class="tooltip" href="/search" title="Fuzzy Search For Authors">Search</a>
       </li>
       <li class="{{args.class_9}}">
-        <a class="tooltip" href="/sprint4_get_static_page" title="Find Relationships between two authors">Relation</a>
+        <a class="dropdown-button" href="#" data-activates="dropdown2">Relationships<i class="material-icons right">arrow_drop_down</i></a>
       </li>
     </ul>
     <ul class="side-nav" id="mobile-demo">
       <li class="{{args.class_1}}">
-        <a href="/">Home</a>
+        <a href="/home">Home</a>
       </li>
       <li class="{{args.class_2}}">
         <a href="/statisticsdetails/publication_summary">Publication Summary</a>
@@ -100,7 +111,10 @@
         <a href="/search">Search</a>
       </li>
       <li class="{{args.class_9}}">
-        <a href="/sprint4_get_static_page">Sprint4Story4</a>
+        <a href="/get_degree_static_page">Sprint4Story4</a>
+      </li>
+        <li class="{{args.class_10}}">
+        <a href="/author_network">Author Network</a>
       </li>
     </ul>
   </div>

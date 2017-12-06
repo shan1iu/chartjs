@@ -2,88 +2,181 @@
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
 
-<h1>{{ args.title }}</h1>
-<form name="input" action="/author_network" method="get" data-ajax="false">
-Author: <input type="search" name="name" id="name">
-<input type="submit" value="Search">
-</form>
-
-<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<div class="row" style="margin-top: 3rem;">
+  <form name="input" action="/author_network" method="get" data-ajax="false">
+    <div class="input-field col s12 m8">
+      <input placeholder="Input Author's Name" id="name" name="name" type="search" class="validate"
+             onkeyup="showHint(this.value, 'name')" onblur="keywordBlur()"
+             onfocus="showHint(this.value, 'name')">
+      <label for="name">Input Author's Name</label>
+    </div>
+    <div class="input-field col s12 m4">
+      <button type="submit" value="Search" class="waves-effect waves-light btn" style="width: 100%; height: 3rem;">
+        Search
+      </button>
+    </div>
+  </form>
+</div>
+<div class="row">
+  <div id="pop_suggest">
+    <table id="pop_content_table" class="centered" style="position: relative;">
+      <tbody id="pop_content_body"></tbody>
+    </table>
+  </div>
+</div>
+<h5 id="header_id" style="display: none;">{{ args.header }}</h5>
+<div class="row center" id="d3_id">
+</div>
 <style>
+  .link {
+    stroke: #aaa;
+  }
 
-.link {
-  stroke: #aaa;
-}
+  .node text {
+    stroke: #000;
+    cursor: pointer;
+  }
 
-.node text {
-stroke:#000;
-cursos:pointer;
-}
-
-.node circle{
-stroke:#000;
-stroke-width:1px;
-}
+  .node circle {
+    stroke: #000;
+    stroke-width: 1px;
+  }
 
 </style>
 <body>
+{% endblock %}
+
+{% block plotjs %}
+<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
 <script>
+    //advanced search
+    function clearContent() {
+        var pop_content_body = document.getElementById("pop_content_body");
+        var child_length = pop_content_body.childNodes.length;
+        for (var i = child_length - 1; i >= 0; i--) {
+            pop_content_body.removeChild(pop_content_body.childNodes[i]);
+        }
+        document.getElementById("pop_content_table").style.border = "none";
+    }
+    function keywordBlur() {
+        setTimeout(clearContent, 10);
+    }
+    function setLocation(search_box_id) {
+        var content = document.getElementById(search_box_id);
+        var pop_content_body = document.getElementById("pop_content_body");
+        var pop_content_table = document.getElementById("pop_content_table");
+        var width = content.offsetWidth;
+        var left = content.offsetLeft;
+        var top = content["offsetTop"] + content.offsetHeight;
+        pop_content_table.style.left = left + "px";
+        pop_content_body.style.top = top + "px";
+        pop_content_table.style.width = width + "px";
+    }
+    function advancedSearch(data, search_box_id) {
+        clearContent();
+        setLocation(search_box_id);
+        var length = data.length;
+        for (var i = 0; i < length; i++) {
+            var author = data[i];
+            var tr = document.createElement("tr");
+            var td = document.createElement("td");
+            td.onmouseover = function () {
+                this.className = "mouseOver";
+            };
+            td.onmouseout = function () {
+                this.className = "";
+            };
+            td.onclick = function () {
+                document.getElementById(search_box_id).value = this.innerHTML;
+                document.getElementById(search_box_id).focus();
+                clearContent();
+            };
+            var text = document.createTextNode(author);
+            td.appendChild(text);
+            tr.appendChild(td);
+            document.getElementById("pop_content_body").appendChild(tr);
+        }
+    }
+    function showHint(str, search_box_id) {
+        var xmlhttp;
+        if (str === "") {
+            clearContent();
+        } else {
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.responseType = "json";
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    var json_data = JSON.stringify(xmlhttp.response);
+                    var data_list = JSON.parse(json_data);
+                    //document.getElementById(des_id).innerHTML = xmlhttp.response;
+                    if (data_list["data"].length !== 1) {
+                        advancedSearch(data_list["data"], search_box_id);
+                    }
+                }
+            };
+            xmlhttp.open("GET", "/sprint_get_name/" + str, true);
+            xmlhttp.send();
+        }
+    }
+    var width = $("#d3_id").width();
+    var height = 800;
+    var svg = d3.select("#d3_id").append("svg").attr("width", width).attr("height", height);
+    var force = d3.layout.force().gravity(.05).distance(100).charge(-100).size([width, height]);
+    d3.json("/network/{{ args.name }}", function (json) {
+        $("#header_id").show();
+        force.nodes(json.nodes).links(json.links).start();
+        var link = svg.selectAll(".link").data(json.links).enter().append("line").attr("class", "link");
+        var node = svg.selectAll(".node").data(json.nodes).enter().append("g").attr("class", "node").call(force.drag);
+        node.append("circle").attr("r", function (d) {
+            return Math.sqrt(d.coauthors) * 22.5;
+        }).attr("id", function (d) {
+            return d.id;
+        }).attr("fill", function (d) {
+            return d.colour === 0 ? '#1840FF' : '#FFCC31'
+        });
 
-var width = 1200,
-    height = 600
+        node.on("mouseover", function (d) {
+            d3.select(this).select("circle").transition().duration(750).attr("r", function (d) {
+                return Math.sqrt(d.coauthors) * 37.5
+            }).attr("fill", function (d) {
+                return d.colour === 0 ? 'red' : 'cyan'
+            })
+        }).on("mouseout", function (d) {
+            d3.select(this).select("circle").transition().duration(750).attr("r", function (d) {
+                return Math.sqrt(d.coauthors) * 22.5
+            }).attr("fill", function (d) {
+                return d.colour === 0 ? '#1840FF' : '#FFCC31'
+            })
+        });
+        node.attr("dx", function (d) {
+            return Math.sqrt(d.coauthors) * 22.5
+        }).attr("dy", function (d) {
+            return Math.sqrt(d.coauthors) * 22.5
+        });
+        node.append("title").text(function (d) {
+            return d.name;
+        });
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-var force = d3.layout.force()
-    .gravity(.05)
-    .distance(100)
-    .charge(-100)
-    .size([width, height]);
-
-d3.json("/data/{{ args.name }}", function(json) {
-  force
-      .nodes(json.nodes)
-      .links(json.links)
-      .start();
-
-  var link = svg.selectAll(".link")
-      .data(json.links)
-    .enter().append("line")
-      .attr("class", "link");
-
-  var node = svg.selectAll(".node")
-      .data(json.nodes)
-    .enter().append("g")
-      .attr("class", "node")
-      .call(force.drag);
-
-  node.append("circle")
-      .attr("r", function(d) { return Math.sqrt(d.coauthors) * 22.5; })
-      .attr("id", function(d) { return d.id; })
-      .attr("fill", function(d){
-        return d.colour == 0 ? '#1840FF': '#FFCC31'
-      });
-
-  node.filter(function(d) {return d.id == 0}).append("text")
-      .attr("dx", function(d){return Math.sqrt(d.coauthors) * 22.5})
-      .attr("dy", function(d){return Math.sqrt(d.coauthors) * 22.5})
-      .text(function(d) { return d.name });
-
-    node.append("title")
-        .text(function(d) { return d.name; });
-
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-  });
-});
-
+        force.on("tick", function () {
+            link.attr("x1", function (d) {
+                return d.source.x;
+            }).attr("y1", function (d) {
+                return d.source.y;
+            }).attr("x2", function (d) {
+                return d.target.x;
+            }).attr("y2", function (d) {
+                return d.target.y;
+            });
+            node.attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+        });
+    });
 </script>
 
 {% endblock %}

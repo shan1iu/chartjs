@@ -577,6 +577,31 @@ class Database:
             pass
         return paths
 
+    def get_author_graphic(self):
+        from collections import OrderedDict
+        from itertools import islice
+        from operator import itemgetter
+        coauthors = {}
+        for a in self.get_all_authors():
+            coauthors[a] = self.get_coauthor_stat(self.publications, a)
+        order = OrderedDict(sorted(coauthors.items(), key=itemgetter(1), reverse=True))
+        names = list(islice(order, len(self.authors) if len(self.authors) < 60 else 60))
+        tree = []
+        for name in names:
+            network = {}
+            network['name'] = name.replace('.', '')
+            network['imports'] = set()
+            for pub in self.publications:
+                for author in pub.authors:
+                    if name == self.authors[author].name:
+                        for a2 in pub.authors:
+                            if name != self.authors[a2].name and self.authors[a2].name in names:
+                                network['imports'].add(self.authors[a2].name.replace('.', ''))
+            network['size'] = len(network['imports'])
+            network['imports'] = list(network['imports'])
+            tree.append(network)
+        return tree
+
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = ["sub", "sup", "i", "tt", "ref"]
     PUB_TYPE = {
