@@ -113,8 +113,26 @@ def show_author_statistics(name):
     db = app.config['DATABASE']
     args = {"dataset": dataset, "name": name, "title": "Comprehensive Statistics for " + name,
             "data": db.get_all_author_stats(name)}
-
+    args["plotlink"] = "/plot/authorstatistics/" + name
     return render_template('author_statistics.html', args=args)
+
+
+@app.route("/plot/authorstatistics/<name>")
+def show_plot_author_statistics(name):
+    dataset = app.config['DATASET']
+    # db = app.config['DATABASE']
+    args = {"dataset": dataset, "name": name, "title": "Comprehensive Statistics for " + name}
+    args["gobacklink"] = "/authorstatistics/" + name
+    return render_template('plot_author_statistics.html', args=args)
+
+
+@app.route("/plot/authorstatistics/data/<name>")
+def show_plot_data_author_statistics(name):
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset": dataset, "name": name, "title": "Comprehensive Statistics for " + name,
+            "data": db.get_all_author_stats(name)}
+    return jsonify({"data": args["data"]})
 
 
 @app.route("/statisticsdetails/<status>")

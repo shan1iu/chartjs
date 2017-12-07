@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="row center" style="margin-top: 4rem;">
+  <h3>{{args.name}}</h3>
+</div>
+<div class="row" style="margin-top: 4rem;" id="canvas_doughnut_id">
+  <div class="col s12 m6 l6 xl6">
+    <canvas id="pie-chart-grouped1" height="400px"></canvas>
+  </div>
+  <div class="col s12 m6 l6 xl6">
+    <canvas id="pie-chart-grouped2" height="400px"></canvas>
+  </div>
+  <div class="col s12 m6 l6 xl6">
+    <canvas id="pie-chart-grouped3" height="400px"></canvas>
+  </div>
+  <div class="col s12 m6 l6 xl6">
+    <canvas id="pie-chart-grouped4" height="400px"></canvas>
+  </div>
+  <div class="col s12 m6 l6 xl6">
+    <canvas id="pie-chart-grouped5" height="400px"></canvas>
+  </div>
+</div>
+<div class="fixed-action-btn" style="bottom: 95px">
+  <a href="{{ args.gobacklink }}" class="btn-floating btn-large tooltip green" title="View as table">
+    <i class="large material-icons">view_list</i>
+  </a>
+</div>
+<!-- go to top button -->
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large tooltip red" href="#top" title="Go to the top">
+    <i class="large material-icons">navigation</i>
+  </a>
+</div>
+{% endblock %}
+{% block plotjs %}
+<script>
+    var author_name = window.location.pathname.slice(23);
+    ajaxDataAuthorStat("/plot/authorstatistics/data/" + author_name, plotAuthorStat, 'pie-chart-grouped');
+    function ajaxDataAuthorStat(url, f, canvas_id) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                f(response, canvas_id);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    function plotAuthorStat(data, canvas_id) {
+        for (var i = 1; i < data["data"][1].length + 1; i++) {
+            var eachCanvasId = canvas_id + (i) + "";
+            var text = data["data"][1][i - 1][0];
+            var pie_data = data["data"][1][i - 1].slice(1);
+            var sum = 0;
+            for (var j = 0; j < pie_data.length; j++) {
+                sum += data["data"][1][i - 1].slice(1)[j];
+            }
+            if (sum === 0) {
+                $("#" + eachCanvasId).hide();
+            } else {
+                new Chart(document.getElementById(eachCanvasId), {
+                    type: 'pie',
+                    data: {
+                        labels: ["Conference Paper", "Journal", "Book", "Book Chapter", "Overall"],
+                        datasets: [{
+                            label: text,
+                            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                            data: pie_data
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: text
+                        }
+                    }
+                });
+            }
+        }
+    }
+</script>
+{% endblock %}
