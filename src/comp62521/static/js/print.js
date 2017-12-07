@@ -82,8 +82,8 @@ function parseData(data) {
 function template(id, arg_node, arg_edge, flag) {
     //console.log(id, arg_node, arg_edge, flag);
     //console.log(typeof id, typeof arg_node, typeof arg_edge, typeof flag);
-    var width = flag ? 2 : 0.5;
-    var lineStyle = flag ? "solid" : "dashed";
+    var width = flag ? 1 : 0;
+    var lineStyle = flag ? "solid" : "";
     var arrow = flag ? 'triangle' : "none";
     return {
         container: document.getElementById(id),
@@ -99,10 +99,10 @@ function template(id, arg_node, arg_edge, flag) {
                 style: {
                     'content': 'data(name)',
                     'text-valign': 'center',
-                    'color': 'white',
-                    'text-outline-width': 2,
+                    'color': '#000',
+                    'text-outline-width': 0,
                     'text-outline-color': '#999',
-                    'background-color': '#999',
+                    'background-color': '#ff8c92',
                     'padding': '20px'
                 }
             },
@@ -113,8 +113,8 @@ function template(id, arg_node, arg_edge, flag) {
                     'width': width,
                     'target-arrow-shape': arrow,
                     'background-color': 'black',
-                    'line-color': 'black',
-                    'target-arrow-color': 'black',
+                    'line-color': '#999',
+                    'target-arrow-color': '#999',
                     'source-arrow-color': 'black',
                     'text-outline-color': 'black',
                     'line-style': lineStyle

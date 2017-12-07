@@ -1,7 +1,23 @@
 {% extends "base.html" %}
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
-<div class="row center" id="d3_home_id">
+<div class="row">
+
+  <div class="col s12 m3 left" style="margin-top: 2rem;">
+    <h5 class="center googleFont">TEAM NOETHER</h5>
+    <p class="googleFont1" style="text-indent: 1em;font-size: 1.1em">
+      Publications manages the research collaborations for the School of Computer Science at the University of
+      Manchester.
+    </p>
+    <p class="googleFont1" style="text-indent: 1em;font-size: 1.1em">
+      Publications can be Conference Papers, Journals, Books or Book Chapters. Data about the publication grouped by
+      year and authors has been recorded and adequately visualised. Information about the author networks is also
+      available.
+    </p>
+  </div>
+
+  <div class="col s12 m9 right" id="d3_home_id">
+  </div>
 </div>
 <style>
   .node {
