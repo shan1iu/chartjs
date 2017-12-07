@@ -9,7 +9,8 @@
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/themes/tooltipster-shadow.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     body {
@@ -18,12 +19,26 @@
       flex-direction: column;
     }
 
+    .card_margin_top {
+      margin-top: 12px;
+    }
+
     main {
       flex: 1 0 auto;
     }
 
+    .self_shadow {
+      -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 1px 1px -2px rgba(0, 0, 0, 0.2);
+      -moz-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 1px 1px -2px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 1px 1px -2px rgba(0, 0, 0, 0.2);
+    }
+
     .googleFont {
-      font-family: 'Press Start 2P', cursive;
+      font-family: 'Oswald', cursive;
+    }
+
+    .googleFont1 {
+      font-family: 'Open Sans Condensed', sans-serif;
     }
 
     thead th:hover,
@@ -68,7 +83,11 @@
         </a>
       </li>
       <li class="{{args.class_2}} {{args.class_3}} {{args.class_4}}">
-        <a class="dropdown-button" href="#" data-activates="dropdown1">Publication<i class="material-icons right">arrow_drop_down</i></a>
+        <a class="dropdown-button" href="#" data-activates="dropdown1">
+          <i class="large material-icons left">book</i>
+          Publication
+          <i class="material-icons right">arrow_drop_down</i>
+        </a>
       </li>
       <li class="{{args.class_5}}">
         <a class="tooltip" href="/statisticsdetails/author_year" title="Authors by Year">Author by Year</a>
@@ -83,7 +102,10 @@
         <a class="tooltip" href="/search" title="Search">Search</a>
       </li>
       <li class="{{args.class_9}} {{args.class_10}}">
-        <a class="dropdown-button" href="#" data-activates="dropdown2">Relationships<i class="material-icons right">arrow_drop_down</i></a>
+        <a class="dropdown-button" href="#" data-activates="dropdown2">
+          <i class="large material-icons left">link</i>
+          Relationships
+          <i class="material-icons right">arrow_drop_down</i></a>
       </li>
     </ul>
     <ul class="side-nav" id="mobile-demo">
@@ -114,7 +136,7 @@
       <li class="{{args.class_9}}">
         <a href="/get_degree_static_page">Degree of Separation</a>
       </li>
-        <li class="{{args.class_10}}">
+      <li class="{{args.class_10}}">
         <a href="/author_network">Author Network</a>
       </li>
     </ul>
