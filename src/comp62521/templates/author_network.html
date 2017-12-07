@@ -136,20 +136,20 @@
         }).attr("id", function (d) {
             return d.id;
         }).attr("fill", function (d) {
-            return d.colour === 0 ? '#1840FF' : '#FFCC31'
+            return d.colour === 0 ? '#CC4035' : '#26a69a'
         });
 
         node.on("mouseover", function (d) {
             d3.select(this).select("circle").transition().duration(750).attr("r", function (d) {
                 return Math.sqrt(d.coauthors) * 25
             }).attr("fill", function (d) {
-                return d.colour === 0 ? 'red' : 'cyan'
+                return d.colour === 0 ? 'red' : '#4DA3FF'
             })
         }).on("mouseout", function (d) {
             d3.select(this).select("circle").transition().duration(750).attr("r", function (d) {
                 return Math.sqrt(d.coauthors) * 22.5
             }).attr("fill", function (d) {
-                return d.colour === 0 ? '#1840FF' : '#FFCC31'
+                return d.colour === 0 ? '#CC4035' : '#26a69a'
             })
         });
         node.attr("dx", function (d) {
