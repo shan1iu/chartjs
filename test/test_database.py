@@ -338,11 +338,18 @@ class TestDatabase(unittest.TestCase):
                              [{'source': 0, 'target': 1}], 'multigraph': False})
 
     def test_get_author_graphic(self):
-        from collections import OrderedDict
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         self.assertEqual(db.get_author_graphic(), [{'imports': [u'AUTHOR2'], 'name': u'AUTHOR1', 'size': 1},
                                                    {'imports': [u'AUTHOR1'], 'name': u'AUTHOR2', 'size': 1}])
+
+    def test_get_coauthor_details(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "publications_small_sample.xml")))
+        self.assertEqual(db.get_coauthor_details('Stefano Ceri'), [(u'Raghu Ramakrishnan', 1), (u'Stefano Ceri', 2),
+                                                                   (u'Piero Fraternali', 1)])
+        self.assertEqual(db.get_coauthor_details('Simon Harper'), [(u'Yeliz Yesilada', 1), (u'Carole A. Goble', 1),
+                                                                   (u'Simon Harper', 1), (u'Robert Stevens', 1)])
 
 
 if __name__ == '__main__':
